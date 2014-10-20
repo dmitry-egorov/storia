@@ -1,15 +1,8 @@
-<div class="list" ng-controller="MainCtrl">
-    <article ng-repeat="event in events">
+<div class="events-list" ng-controller="MainCtrl">
+    <article ng-repeat="event in data.events">
         <header>
-            <h3>{{event.title}}</h3>
+            <h3><a ng-href="#/events/{{event.id}}">{{event.title}}</a></h3>
         </header>
-        <div ng-show="event.coverage.isAvailable">
-            <div class="author-info">
-                <img ng-src="{{event.coverage.author.image}}" width="32" height="32" alt="{{event.coverage.author.name}}" />
-                <div><span class="author-name">{{event.coverage.author.name}}</span>, {{event.coverage.author.publisherName}}</div>
-            </div>
-            <div ng-bind-html="event.coverage.preview"></div>
-        </div>
-        <div class="no-coverage" ng-hide="event.coverage.isAvailable">No coverage is available</div>
+        <div st-coverage-list coverages="_(event.coverages).take(1)"></div>
     </article>
 </div>

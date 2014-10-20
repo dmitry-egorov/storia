@@ -49,17 +49,41 @@ body {
 }
 
 /* Supporting marketing content */
-.list {
-    margin: 40px 0;
+.events-list
+{
+    h3>a
+    {
+        color: black;
+    }
+
+    article
+    {
+        p + h3
+        {
+            margin-top: 28px;
+        }
+    }
+}
+
+.event>header
+{
+    padding-bottom: 5px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #ddd;
+}
+
+div[st-coverage-list]
+{
     article
     {
         padding-bottom: 5px;
         margin-bottom: 5px;
         border-bottom: 1px solid #ddd;
 
-        div.author-info
+        .author-info
         {
              color: gray;
+             margin-top: 20px;
              margin-bottom: 5px;
              @include clearfix;
 
@@ -74,17 +98,12 @@ body {
                  margin-right: 5px;
              }
         }
+    }
 
-        p + h3
-        {
-            margin-top: 28px;
-        }
-
-        .no-coverage
-        {
-            color: gray;
-            font-style: italic;
-        }
+    .no-coverage
+    {
+        color: gray;
+        font-style: italic;
     }
 }
 
