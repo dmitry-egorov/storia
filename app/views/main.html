@@ -1,8 +1,11 @@
 <div class="events-list" ng-controller="MainCtrl">
-    <article ng-repeat="event in data.events">
+    <article ng-repeat="event in events">
         <header>
-            <h3><a ng-href="#/events/{{event.id}}">{{event.title}}</a></h3>
+            <h3>
+                <a ng-href="#/events/{{event.id}}">{{event.title}}</a>&nbsp
+                <span st-reports-count count="event.reports.length"></span>
+            </h3>
         </header>
-        <div st-coverage-list coverages="_(event.coverages).take(1)"></div>
+        <div st-reports-list reports="firstOf(event.reports)"></div>
     </article>
 </div>

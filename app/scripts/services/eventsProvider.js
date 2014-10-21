@@ -5,7 +5,7 @@ var events =
     {
         id: 1,
         title: 'Steam Controller announced by Valve',
-        coverages:
+        reports:
         [
             {
                 author:
@@ -30,7 +30,7 @@ var events =
     {
         id: 2,
         title: 'Elon Musk introduces the Tesla ‘D’',
-        coverages:
+        reports:
         [
             {
                 author:
@@ -46,7 +46,7 @@ var events =
     {
         id: 3,
         title: 'Cure for cancer found',
-        coverages: []
+        reports: []
     }
 ];
 
@@ -61,9 +61,16 @@ function EventsProvider(_)
     {
         return _(events).find(function (e) { return e.id === id; });
     };
+
+    this.addEvent = function(event)
+    {
+        var lastId = _(events).last().id;
+
+        events.unshift({id: lastId + 1, title: event.title, reports: []});
+    };
 }
 
 angular
-.module ('eventsProvider', [])
+.module ('eventsProvider', ['underscore'])
 .service('eventsProvider', ['_', EventsProvider]);
 

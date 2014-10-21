@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name storiaFrontendApp.controller:EventsCtrl
+ * @name storiaApp.controller:EventsCtrl
  * @description
  * # EventsCtrl
- * Controller of the storiaFrontendApp
+ * Controller of the storiaApp
  */
 angular
 .module('storiaApp')

@@ -11,9 +11,8 @@
 angular
 .module('storiaApp',
 [
-    'angular-underscore',
-    'components',
     'eventsProvider',
+    'ngDialog',
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -39,8 +38,7 @@ angular
         redirectTo: '/'
     });
 })
-//.run(['$rootScope', '_', function($rootScope, _)
-//{
-//    $rootScope._ = _;
-//}])
-;
+.run(['$rootScope', '_', function($rootScope, _)
+{
+    $rootScope._ = _;
+}]);

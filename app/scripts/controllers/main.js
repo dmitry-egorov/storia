@@ -9,8 +9,13 @@
  */
 angular
 .module('storiaApp')
-.controller('MainCtrl', ['$scope', 'eventsProvider', function ($scope, eventsProvider)
+.controller('MainCtrl', ['$scope', 'eventsProvider', '_', function ($scope, eventsProvider, _)
 {
     var events = eventsProvider.getAll();
-    $scope.data = { events: events };
+    $scope.events = events;
+
+    $scope.firstOf = function (reports)
+    {
+        return _(reports).take(1);
+    };
 }]);
