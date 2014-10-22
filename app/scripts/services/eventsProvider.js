@@ -73,7 +73,7 @@ function EventsProvider(_)
     {
         var event = this.getBy(eventId);
 
-        event.reports.unshift(report);
+        event.reports.push(report);
     };
 }
 
