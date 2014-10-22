@@ -68,6 +68,13 @@ function EventsProvider(_)
 
         events.unshift({id: lastId + 1, title: event.title, reports: []});
     };
+
+    this.addReport = function(eventId, report)
+    {
+        var event = this.getBy(eventId);
+
+        event.reports.unshift(report);
+    };
 }
 
 angular

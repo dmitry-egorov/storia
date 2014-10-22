@@ -9,11 +9,7 @@ angular
         templateUrl: '/partials/stReportsCount.html',
         scope:
         {
-            countFunc: '&count'
-        },
-        controller: function($scope)
-        {
-            $scope.count = $scope.countFunc();
+            count: '=count'
         }
     };
 });

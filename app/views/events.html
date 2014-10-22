@@ -1,6 +1,10 @@
 <div class="event-details" ng-controller="EventsCtrl">
     <header>
         <h2>{{event.title}}</h2>
+        <div class="input-area" ng-controller="AddReportCtrl">
+            <textarea name="Text1" cols="40" rows="2" ng-model="text" placeholder="Write your report"></textarea>
+            <input type="button" value="Write Report" ng-click="tryAddReport(event.id)"/>
+        </div>
         <div class="reports-count" st-reports-count count="event.reports.length"></div>
     </header>
     <div st-reports-list reports="event.reports"></div>

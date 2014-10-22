@@ -1,0 +1,6 @@
+{
+  "name": "storia",
+  "root": "dist",
+  "clean_urls": false,
+  "error_page": "404.html"
+}
