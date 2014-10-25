@@ -1,5 +1,9 @@
 'use strict';
 
+angular.module('chance', []).factory('chance', function() {
+    return window.chance;
+});
+
 /**
  * @ngdoc overview
  * @name storiaApp
@@ -12,6 +16,7 @@ angular
 .module('storiaApp',
 [
     'eventsProvider',
+    'chance',
     'ngDialog',
     'ngAnimate',
     'ngCookies',

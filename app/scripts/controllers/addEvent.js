@@ -15,6 +15,7 @@ angular
     $scope.tryAddEvent = function()
     {
         eventsProvider.addEvent({title: $scope.title});
+
         return true;
     };
 }]);

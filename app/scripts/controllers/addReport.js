@@ -12,6 +12,13 @@ angular
 .controller('AddReportCtrl', ['$scope', 'eventsProvider', function ($scope, eventsProvider)
 {
     $scope.text = '';
+    $scope.expanded = false;
+
+    $scope.expandReportInput = function()
+    {
+        $scope.expanded = true;
+    };
+
     $scope.tryAddReport = function(eventId)
     {
         var report =
@@ -26,6 +33,10 @@ angular
         };
 
         eventsProvider.addReport(eventId, report);
+
+        $scope.expanded = false;
+        $scope.text = '';
+
         return true;
     };
 }]);

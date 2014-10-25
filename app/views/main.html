@@ -1,11 +1,11 @@
 <div class="events-list" ng-controller="MainCtrl">
-    <article ng-repeat="event in events">
+    <article ng-repeat="(id, event) in events track by id">
         <header>
             <h3>
-                <a ng-href="#/events/{{event.id}}">{{event.title}}</a>&nbsp
-                <span st-reports-count count="event.reports.length"></span>
+                <a ng-href="#/events/{{id}}">{{event.title}}</a>&nbsp
+                <span st-reports-count class="reports-count" count="event.reports | count"></span>
             </h3>
         </header>
-        <div st-reports-list reports="firstOf(event.reports)"></div>
+        <div st-report report="event | previewReport" ng-show="event | hasPreview"></div>
     </article>
 </div>

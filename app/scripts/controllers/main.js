@@ -9,13 +9,18 @@
  */
 angular
 .module('storiaApp')
-.controller('MainCtrl', ['$scope', 'eventsProvider', '_', function ($scope, eventsProvider, _)
+.controller('MainCtrl', ['$scope', 'eventsProvider', function ($scope, eventsProvider)
 {
     var events = eventsProvider.getAll();
     $scope.events = events;
 
-    $scope.firstOf = function (reports)
-    {
-        return _(reports).take(1);
-    };
+//    $scope.previewFor = function(event)
+//    {
+//        return event.reports[event.previewReportId];
+//    };
+//
+//    $scope.hasPreview = function(event)
+//    {
+//        return event.previewReportId !== undefined;
+//    };
 }]);
