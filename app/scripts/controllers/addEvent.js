@@ -9,12 +9,12 @@
  */
 angular
 .module('storiaApp')
-.controller('AddEventCtrl', ['$scope', 'eventsProvider', function ($scope, eventsProvider)
+.controller('AddEventCtrl', ['$scope', 'eventsStorage', '$location', function ($scope, eventsStorage, $location)
 {
     $scope.title = '';
-    $scope.tryAddEvent = function()
+    $scope.tryAddEvent = function(title)
     {
-        eventsProvider.addEvent({title: $scope.title});
+        eventsStorage.addEvent(title, function(id) { $location.path('/events/' + id); });
 
         return true;
     };

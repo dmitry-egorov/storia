@@ -1,5 +1,4 @@
-<header class="author-info">
-    <img ng-src="{{report.author.image}}" width="32" height="32" alt="{{report.author.name}}" />
-    <div><span class="author-name">{{report.author.name}}</span>, {{report.author.publisherName}}</div>
-</header>
-<div ng-bind-html="report.preview"></div>
+<div ng-show="report.content && report.authorId">
+    <div st-author-info pid="report.authorId"></div>
+    <div ng-bind-html="report.content"></div>
+</div>

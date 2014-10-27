@@ -4,6 +4,10 @@ angular.module('chance', []).factory('chance', function() {
     return window.chance;
 });
 
+angular.module('debug', []);
+angular.module('utils', []);
+angular.module('stServices', ['firebase.config', 'chance', 'utils', 'debug']);
+
 /**
  * @ngdoc overview
  * @name storiaApp
@@ -15,8 +19,13 @@ angular.module('chance', []).factory('chance', function() {
 angular
 .module('storiaApp',
 [
-    'eventsProvider',
+    'firebase',
+    'debug',
+    'utils',
+    'firebase.config',
+    'stServices',
     'chance',
+    'underscore',
     'ngDialog',
     'ngAnimate',
     'ngCookies',

@@ -1,0 +1,4 @@
+<div class="header-menu">
+    <div ng-show="isLoggedIn"><a class="user-name" ng-bind="name" ng-click="logout()" href="" title="Logout"></a><a class="add-event" ng-click="addEvent()">Add Event</a></div>
+    <div ng-hide="isLoggedIn"><a class="fb-login" ng-click="fbLogin()">Login with Facebook</a></div>
+</div>

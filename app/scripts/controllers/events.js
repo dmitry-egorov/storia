@@ -12,8 +12,7 @@ angular
 .controller('EventsCtrl', ['$scope', '$routeParams', 'eventsProvider', function ($scope, $routeParams, eventsProvider)
 {
     var id = $routeParams.id;
-    var event = eventsProvider.getBy(id);
-
     $scope.id = id;
-    $scope.event = event;
+
+    eventsProvider.getBy(id).$bindTo($scope, 'event');
 }]);

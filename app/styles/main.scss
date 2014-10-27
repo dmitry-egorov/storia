@@ -4,6 +4,13 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // endbower
 @import 'sassy-buttons/_sassybuttons.sass';
 
+@mixin st-button-blue
+{
+    @include sassy-button-gradient("simple", #4d8ccd);
+
+    padding: 5px;
+}
+
 .browsehappy
 {
     margin: 0.2em 0;
@@ -31,7 +38,10 @@ body
 /* Custom page header */
 .header
 {
+    padding-bottom: 10px;
     border-bottom: 1px solid #e5e5e5;
+    line-height: 25px;
+
     @include clearfix;
 
     /* Make the masthead heading the same height as the navigation */
@@ -40,7 +50,6 @@ body
         float: left;
         margin-top: 0;
         margin-bottom: 0;
-        line-height: 25px;
 
         a
         {
@@ -48,14 +57,24 @@ body
         }
     }
 
-    .add-event
+    .header-menu
     {
-        @include sassy-button-gradient("simple", #4d8ccd);
+        float: right;
 
-        float:right;
-        padding: 5px;
-        line-height: 25px;
-        margin-bottom: 10px;
+        .user-name
+        {
+            padding-right: 15px;
+        }
+
+        .add-event
+        {
+            @include st-button-blue;
+        }
+
+        .fb-login
+        {
+            @include st-button-blue;
+        }
     }
 }
 
@@ -105,6 +124,7 @@ body
     article
     {
         padding-bottom: 5px;
+        margin-top: 20px;
         margin-bottom: 5px;
         border-bottom: 1px solid #ddd;
     }
@@ -128,6 +148,11 @@ body
     {
         margin-top: 15px;
         margin-bottom: 15px;
+
+        .author-info
+        {
+            padding-bottom: 10px;
+        }
     }
 
     .write-report
@@ -136,27 +161,23 @@ body
     }
 }
 
-div[st-report]
+.author-info
 {
-    .author-info
-    {
-         color: gray;
-         margin-top: 20px;
-         margin-bottom: 5px;
-         @include clearfix;
+     color: gray;
+     @include clearfix;
 
-         .author-name
-         {
-            font-weight: bold;
-         }
+     .author-name
+     {
+        font-weight: bold;
+     }
 
-         img
-         {
-             float:left;
-             margin-right: 5px;
-         }
-    }
+     img
+     {
+         float:left;
+         margin-right: 5px;
+     }
 }
+
 
 
 .input-area
@@ -179,9 +200,8 @@ div[st-report]
 
     input[type="button"]
     {
-        @include sassy-button-gradient("simple", #4d8ccd);
+        @include st-button-blue;
 
-        padding: 5px;
         margin-top: 10px;
     }
 }
@@ -221,10 +241,5 @@ div[st-report]
     {
         padding-left: 0;
         padding-right: 0;
-    }
-    /* Space out the masthead */
-    .header
-    {
-        margin-bottom: 20px;
     }
 }

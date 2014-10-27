@@ -1,16 +1,13 @@
-<div class="event-details" ng-controller="EventsCtrl">
+<div class="event-details" ng-show="event">
     <header>
         <h2>{{event.title}}</h2>
     </header>
 
-    <div class="input-area" ng-controller="AddReportCtrl">
-        <textarea name="Text1" cols="40" rows="{{expanded ? 3 : 2}}" ng-model="text" placeholder="Write your report" ng-click="expandReportInput()"></textarea>
-        <input class="write-report" type="button" value="Write Report" ng-click="tryAddReport(id)" ng-show="expanded"/>
-    </div>
+    <div st-report-input event-id="id"></div>
 
     <div class="reports-count" st-reports-count count="event.reports | count"></div>
 
-    <article ng-repeat="(id, report) in event.reports track by id">
-        <div st-report report="report"></div>
+    <article ng-repeat="(reportId, report) in event.reports">
+        <div st-report rid="reportId"></div>
     </article>
 </div>

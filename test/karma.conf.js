@@ -29,6 +29,8 @@ module.exports = function(config) {
       'bower_components/underscore/underscore.js',
       'bower_components/angular-underscore-module/angular-underscore-module.js',
       'bower_components/ngDialog/js/ngDialog.js',
+      'bower_components/firebase/firebase.js',
+      'bower_components/angularfire/dist/angularfire.min.js',
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
       'test/spec/**/*.js'

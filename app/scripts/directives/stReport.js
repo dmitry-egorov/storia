@@ -2,14 +2,28 @@
 
 angular
 .module('storiaApp')
-.directive('stReport', function ()
+.directive('stReport', ['reportsProvider', function(reportsProvider)
 {
     return {
         restrict: 'A',
         templateUrl: '/partials/stReport.html',
         scope:
         {
-            report: '=report'
+            rid: '='
+        },
+        controller: function($scope)
+        {
+            var unwatch = $scope.$watch('rid', function(reportId)
+            {
+                if(!reportId)
+                {
+                    return;
+                }
+
+                reportsProvider.getBy(reportId).$bindTo($scope, 'report');
+
+                unwatch();
+            });
         }
     };
-});
+}]);
