@@ -5,9 +5,9 @@
 
     <div st-report-input event-id="id"></div>
 
-    <div class="reports-count" st-reports-count count="event.reports | count"></div>
+    <div class="reports-count" st-reports-count count="event.reportsCount"></div>
 
-    <article ng-repeat="(reportId, report) in event.reports">
-        <div st-report rid="reportId"></div>
+    <article ng-repeat="report in event.reports">
+        <div st-report report="report"></div>
     </article>
 </div>

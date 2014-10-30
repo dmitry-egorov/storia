@@ -11,5 +11,10 @@ angular
 .module('storiaApp')
 .controller('MainCtrl', ['$scope', 'eventsProvider', function ($scope, eventsProvider)
 {
-    eventsProvider.getHome().$bindTo($scope, 'events');
+    eventsProvider
+    .getHomeEventsPromise()
+    .then(function(events)
+    {
+        $scope.events = events;
+    });
 }]);

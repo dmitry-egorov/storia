@@ -2,26 +2,61 @@
 
 angular
 .module ('stServices')
-.service('eventsProvider', ['chance', 'FBURL', '$firebase', 'fbDebug', function(chance, FBURL, $firebase, fbDebug)
+.service('eventsProvider', ['FBURL', 'fb', function (FBURL, fb)
 {
     var ref = new Firebase(FBURL);
 
-    this.getHome = function()
+    this.getHomeEventsPromise = function()
     {
-        var eventsRef = ref.child('events');
-
-        fbDebug.watchValue(eventsRef, 'events');
-
-        return $firebase(eventsRef).$asObject();
+        return fb
+        .cached('home')
+        .viewPromise(
+        {
+            _listRef: ref.child('events'),
+            title: true,
+            reportsCount: getReportsCount,
+            preview:
+            {
+                _key: 'previewId',
+                _ref: ref.child('reports'),
+                content: true,
+                author: authorSpec()
+            }
+        });
     };
 
-    this.getBy = function(id)
+    this.getEventPromise = function(id)
     {
-        var eventRef = ref.child('events').child(id);
-
-        fbDebug.watchValue(eventRef, 'events');
-
-        return $firebase(eventRef).$asObject();
+        return fb
+        .cached('event/' + id)
+        .viewPromise(
+        {
+            _ref: ref.child('events'),
+            title: true,
+            reportsCount: getReportsCount,
+            reports:
+            {
+                _listRef: ref.child('reports'),
+                content: true,
+                author: authorSpec()
+            }
+        }, id);
     };
+
+    function authorSpec()
+    {
+        return {
+            _key: 'authorId',
+            _ref: ref.child('profiles'),
+            image: true,
+            name: true,
+            publisherName: true
+        };
+    }
+
+    function getReportsCount(event)
+    {
+        return Object.keys(event.reports || {}).length;
+    }
 }]);
 

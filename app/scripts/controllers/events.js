@@ -14,5 +14,10 @@ angular
     var id = $routeParams.id;
     $scope.id = id;
 
-    eventsProvider.getBy(id).$bindTo($scope, 'event');
+    eventsProvider
+    .getEventPromise(id)
+    .then(function(event)
+    {
+        $scope.event = event;
+    });
 }]);

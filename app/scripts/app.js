@@ -6,6 +6,7 @@ angular.module('chance', []).factory('chance', function() {
 
 angular.module('debug', []);
 angular.module('utils', []);
+angular.module('firebaseUtils', []);
 angular.module('stServices', ['firebase.config', 'chance', 'utils', 'debug']);
 
 /**
@@ -22,6 +23,7 @@ angular
     'firebase',
     'debug',
     'utils',
+    'firebaseUtils',
     'firebase.config',
     'stServices',
     'chance',

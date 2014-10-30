@@ -3,9 +3,10 @@
         <header>
             <h3>
                 <a ng-href="#/events/{{eventId}}">{{event.title}}</a>&nbsp
-                <span st-reports-count class="reports-count" count="event.reports | count"></span>
+                <span st-reports-count class="reports-count" count="event.reportsCount"></span>
             </h3>
         </header>
-        <div st-report rid="event.previewId"></div>
+        <!--<div st-report rid="event.previewId"></div>-->
+        <div st-report report="event.preview"></div>
     </article>
 </div>

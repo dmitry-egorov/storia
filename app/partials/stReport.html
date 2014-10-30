@@ -1,4 +1,4 @@
-<div ng-show="report.content && report.authorId">
-    <div st-author-info pid="report.authorId"></div>
+<div ng-show="report">
+    <div st-author-info profile="report.author"></div>
     <div ng-bind-html="report.content"></div>
 </div>

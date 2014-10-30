@@ -2,19 +2,10 @@
 
 angular
 .module ('stServices')
-.service('profileProvider', ['FBURL', '$firebase', 'fbDebug', function(FBURL, $firebase, fbDebug)
+.service('profileProvider', ['FBURL', function (FBURL)
 {
     var ref = new Firebase(FBURL);
     var auth = ref.getAuth();
-
-    this.getBy = function(profileId)
-    {
-        var profileRef = ref.child('profiles').child(profileId);
-
-        fbDebug.watchValue(profileRef, 'profile');
-
-        return $firebase(profileRef).$asObject();
-    };
 
     this.getCurrentId = function(callback)
     {

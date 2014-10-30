@@ -1,27 +1,27 @@
 'use strict';
 
-describe('Controller: MainCtrl', function () {
+describe('Controller: MainCtrl', function ()
+{
+    beforeEach(module('storiaApp'));
 
-  // load the controller's module
-  beforeEach(module('storiaApp'));
+    var MainCtrl, scope;
+    var events = 1;
 
+    beforeEach(inject(function ($controller, $rootScope)
+    {
+        scope = $rootScope.$new();
+        MainCtrl = $controller('MainCtrl',
+        {
+            $scope: scope,
+            eventsProvider:
+            {
+                getHomeEventsPromise: function() { return { then: function(callback){ callback(events); } }; }
+            }
+        });
+    }));
 
-  var MainCtrl, scope;
-//  var events = [1,2,3];
-
-  // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
-    scope = $rootScope.$new();
-    MainCtrl = $controller('MainCtrl', {
-      $scope: scope,
-      eventsProvider:
-      {
-        getHome: function() {return {$bindTo: function(){}};}
-      }
+    it('should attach a events to the scope', function ()
+    {
+        expect(scope.events).toBe(events);
     });
-  }));
-
-  it('should attach a list of events to the scope', function () {
-//    expect(scope.events).toBe(events);
-  });
 });

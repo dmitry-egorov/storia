@@ -1,24 +1,25 @@
 'use strict';
 
-describe('Controller: EventsCtrl', function () {
+describe('Controller: EventsCtrl', function ()
+{
+    beforeEach(module('storiaApp'));
 
-  // load the controller's module
-  beforeEach(module('storiaApp'));
+    var EventsCtrl, scope;
+    var event = 1;
 
-  var EventsCtrl, scope;
-  var event = '1';
+    beforeEach(inject(function ($controller, $rootScope)
+    {
+        scope = $rootScope.$new();
+        EventsCtrl = $controller('EventsCtrl',
+        {
+            $scope: scope,
+            $routeParams: { id: event },
+            eventsProvider: { getEventPromise: function() { return {then: function(callback) { callback(event); } };} }
+        });
+    }));
 
-  // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
-    scope = $rootScope.$new();
-    EventsCtrl = $controller('EventsCtrl', {
-      $scope: scope,
-      $routeParams: { id: event },
-      eventsProvider: { getBy: function() {return {$bindTo: function(){}};} }
+    it('should attach an event to the scope', function ()
+    {
+        expect(scope.id).toBe(event);
     });
-  }));
-
-  it('should attach an event to the scope', function () {
-//    expect(scope.id).toBe(event);
-  });
 });
