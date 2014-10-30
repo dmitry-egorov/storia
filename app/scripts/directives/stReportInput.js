@@ -2,25 +2,18 @@
 
 angular
 .module('storiaApp')
-.directive('stReportInput', ['reportsStorage', 'profileProvider', function (reportsStorage, profileProvider)
+.directive('stReportInput', ['reportsStorage', function (reportsStorage)
 {
     return {
         restrict: 'A',
         templateUrl: '/partials/stReportInput.html',
         scope:
         {
-            eventId: '=eventId'
+            eventId: '=',
+            authorInfo: '='
         },
         controller: function($scope)
         {
-            profileProvider.getCurrentId(function(profile)
-            {
-                $scope.$evalAsync(function()
-                {
-                    $scope.currentProfileId = profile;
-                });
-            });
-
             $scope.text = '';
             $scope.expanded = false;
 
@@ -31,21 +24,16 @@ angular
 
             $scope.tryAddReport = function(eventId, text)
             {
-                profileProvider.getCurrentId(function(profileId)
+                var authorId = $scope.authorInfo.id;
+                if (!authorId)
                 {
-                    if (!profileId)
-                    {
-                        return;
-                    }
+                    return;
+                }
 
-                    $scope.$evalAsync(function()
-                    {
-                        reportsStorage.addReport(eventId, profileId, text);
+                reportsStorage.addReport(eventId, authorId, text);
 
-                        $scope.expanded = false;
-                        $scope.text = '';
-                    });
-                });
+                $scope.expanded = false;
+                $scope.text = '';
 
                 return true;
             };

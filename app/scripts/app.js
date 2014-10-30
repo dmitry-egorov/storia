@@ -27,7 +27,6 @@ angular
     'firebase.config',
     'stServices',
     'chance',
-    'underscore',
     'ngDialog',
     'ngAnimate',
     'ngCookies',
@@ -54,7 +53,7 @@ angular
         redirectTo: '/'
     });
 })
-.run(['$rootScope', '_', function($rootScope, _)
+.run(['$rootScope', function($rootScope)
 {
     $rootScope._ = _;
 }]);

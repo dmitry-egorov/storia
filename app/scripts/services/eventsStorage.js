@@ -2,15 +2,17 @@
 
 angular
 .module ('stServices')
-.service('eventsStorage', ['chance', 'FBURL', 'encoder', function(chance, FBURL, encoder)
+.service('eventsStorage', ['FBURL', 'encoder', '$q', function(FBURL, encoder, $q)
 {
     var ref = new Firebase(FBURL);
 
-    this.addEvent = function(title, callback)
+    this.addEventPromiseId = function(title)
     {
         var id = encoder.encodeId(title);
 
         var eventRef = ref.child('events').child(id);
+
+        var deferred = $q.defer();
 
         eventRef.once('value', function(snapshot)
         {
@@ -21,14 +23,11 @@ angular
 
             eventRef.set({title: title}, function ()
             {
-                if (!callback)
-                {
-                    return;
-                }
-
-                callback(id);
+                deferred.resolve(id);
             });
         });
+
+        return deferred.promise;
     };
 }]);
 

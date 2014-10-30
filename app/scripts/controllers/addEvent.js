@@ -14,7 +14,9 @@ angular
     $scope.title = '';
     $scope.tryAddEvent = function(title)
     {
-        eventsStorage.addEvent(title, function(id) { $location.path('/events/' + id); });
+        eventsStorage
+        .addEventPromiseId(title)
+        .then(function(id) { $location.path('/events/' + id); });
 
         return true;
     };

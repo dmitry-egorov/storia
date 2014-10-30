@@ -1,5 +1,5 @@
-<div class="input-area" ng-show="currentProfileId">
-    <div st-author-info pid="currentProfileId"></div>
+<div class="input-area" ng-show="authorInfo.id">
+    <div st-author-info profile="authorInfo.profile"></div>
     <textarea name="ReportText" cols="40" rows="{{expanded ? 3 : 2}}" ng-model="text" placeholder="Write your report" ng-click="expandReportInput()"></textarea>
     <input class="write-report" type="button" value="Write Report" ng-click="tryAddReport(eventId, text)" ng-show="expanded"/>
 </div>

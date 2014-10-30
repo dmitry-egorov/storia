@@ -19,7 +19,8 @@
     "chance": "~0.6.1",
     "firebase": "~1.1.2",
     "angularfire": "~0.8.2",
-    "underscore.string": "~2.3.3"
+    "underscore.string": "~2.3.3",
+    "rxjs": "~2.3.14"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.0",

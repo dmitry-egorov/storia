@@ -21,6 +21,8 @@
   "globals": {
     "angular": false,
     "Firebase": false,
-    "fbDebug": false
+    "fbDebug": false,
+    "_": true,
+    "Rx": false
   }
 }

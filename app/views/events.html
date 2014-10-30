@@ -1,9 +1,9 @@
-<div class="event-details" ng-show="event">
+<div class="event-details" ng-show="id && event">
     <header>
         <h2>{{event.title}}</h2>
     </header>
 
-    <div st-report-input event-id="id"></div>
+    <div st-report-input event-id="id" author-info="currentProfile"></div>
 
     <div class="reports-count" st-reports-count count="event.reportsCount"></div>
 

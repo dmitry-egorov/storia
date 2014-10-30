@@ -5,23 +5,51 @@ angular
 .service('profileProvider', ['FBURL', function (FBURL)
 {
     var ref = new Firebase(FBURL);
-    var auth = ref.getAuth();
 
-    this.getCurrentId = function(callback)
+    var currentProfileSubject = new Rx.BehaviorSubject({id: undefined, profile: undefined});
+
+    (function()
     {
-        if(auth)
+        var profileRef;
+
+        ref.onAuth(function(authData)
         {
+            if(profileRef)
+            {
+                profileRef.off();
+            }
+
+            if(!authData)
+            {
+                currentProfileSubject.onNext({id: undefined, profile: undefined});
+                return;
+            }
+
             ref
             .child('accounts')
-            .child(auth.uid)
-            .once('value', function(snapshot)
+            .child(authData.uid)
+            .once('value', function(snap)
             {
-                callback(snapshot.val().profileId);
+                var account = snap.val();
+
+                var profileId = account.profileId;
+
+                profileRef =
+                ref
+                .child('profiles')
+                .child(profileId);
+
+                profileRef
+                .on('value', function(snap)
+                {
+                    currentProfileSubject.onNext({id: profileId, profile: snap.val()});
+                });
             });
-        }
-        else
-        {
-            callback(undefined);
-        }
+        });
+    })();
+
+    this.getCurrentProfileObservable = function()
+    {
+        return currentProfileSubject;
     };
 }]);

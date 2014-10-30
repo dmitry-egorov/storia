@@ -5,7 +5,7 @@
  */
 angular
 .module('storiaApp')
-.filter('count', ['_', function(_)
+.filter('count', function(_)
 {
     return function(obj)
     {
@@ -21,4 +21,4 @@ angular
         })
         .length;
     };
-}]);
+});
