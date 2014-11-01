@@ -10,6 +10,9 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog.css" />
     <link rel="stylesheet" href="bower_components/ngDialog/css/ngDialog-theme-default.css" />
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/bootstrap-social/bootstrap-social.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -81,6 +84,8 @@
     <script src="bower_components/mockfirebase/dist/mockfirebase.js"></script>
     <script src="bower_components/angularfire/dist/angularfire.min.js"></script>
     <script src="bower_components/rxjs/dist/rx.all.js"></script>
+    <script src="bower_components/angular-order-object-by/src/ng-order-object-by.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
     <!-- endbower -->
     <script src="https://cdn.firebase.com/libs/firebase-util/0.1.0/firebase-util.js"></script>
     <!-- endbuild -->
@@ -91,14 +96,19 @@
     <script src="scripts/debug/debug.js"></script>
     <script src="scripts/angularfire/config.js"></script>
     <script src="scripts/utils/encoder.js"></script>
+    <script src="scripts/utils/helper.js"></script>
+    <script src="scripts/utils/scopeExtensions.js"></script>
     <script src="scripts/firebase/firebase-utils.js"></script>
+    <script src="scripts/services/authenticator.js"></script>
     <script src="scripts/services/profileProvider.js"></script>
-    <script src="scripts/services/eventsStorage.js"></script>
     <script src="scripts/services/eventsProvider.js"></script>
+    <script src="scripts/services/reportsProvider.js"></script>
+    <script src="scripts/services/eventsStorage.js"></script>
     <script src="scripts/services/reportsStorage.js"></script>
     <script src="scripts/services/userStorage.js"></script>
     <script src="scripts/directives/stAuthorInfo.js"></script>
     <script src="scripts/directives/stReport.js"></script>
+    <script src="scripts/directives/stReportMenu.js"></script>
     <script src="scripts/directives/stReportInput.js"></script>
     <script src="scripts/directives/stHeader.js"></script>
     <script src="scripts/directives/stReportsCount.js"></script>

@@ -3,13 +3,8 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 @import 'sassy-buttons/_sassybuttons.sass';
-
-@mixin st-button-blue
-{
-    @include sassy-button-gradient("simple", #4d8ccd);
-
-    padding: 5px;
-}
+@import 'bootstrap-social/bootstrap-social.scss';
+@import 'buttons.scss';
 
 .browsehappy
 {
@@ -68,12 +63,17 @@ body
 
         .add-event
         {
-            @include st-button-blue;
+            @include st-button;
         }
 
         .fb-login
         {
-            @include st-button-blue;
+            @extend .btn, .btn-sm, .btn-social-icon, .btn-facebook;
+        }
+
+        .gp-login
+        {
+          @extend .btn, .btn-sm, .btn-social-icon, .btn-google-plus;
         }
     }
 }
@@ -161,6 +161,42 @@ body
     }
 }
 
+.report
+{
+    margin-bottom: 15px;
+
+    [st-author-info]
+    {
+        margin-bottom: 10px;
+    }
+}
+
+.report-menu
+{
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    .upvote-btn
+    {
+        &.not-upvoted
+        {
+            @include st-button('green');
+        }
+
+        &.upvoted
+        {
+            @include st-button('gray');
+        }
+
+        .votes-count
+        {
+            @extend .badge;
+            font-weight: bold;
+            margin-left: 3px;
+        }
+    }
+}
+
 .author-info
 {
      color: gray;
@@ -178,8 +214,6 @@ body
      }
 }
 
-
-
 .input-area
 {
     border-radius: 5px;
@@ -190,7 +224,6 @@ body
 
 .dialog, .input-area
 {
-//    font-family:
     @include clearfix;
 
     textarea
@@ -198,9 +231,9 @@ body
         width: 100%;
     }
 
-    input[type="button"]
+    button
     {
-        @include st-button-blue;
+        @include st-button;
 
         margin-top: 10px;
     }

@@ -2,7 +2,7 @@
 
 angular
 .module ('stServices')
-.service('userStorage', ['FBURL', 'encoder', function(FBURL, encoder)
+.service('userStorage', ['FBURL', 'encoder', '$http', function(FBURL, encoder, $http)
 {
     this.tryCreateUser = function(uid, provider, providerData, displayName)
     {
@@ -22,28 +22,56 @@ angular
 
             var profileId = encoder.encodeId(displayName);
 
-            var profileData =
+            getProfilePicture(provider, providerData, function(imageUrl)
             {
-                name: displayName,
-                image: 'http://graph.facebook.com/' + providerData.id + '/picture?type=square',
-                publicherName: ''
-            };
+                var profileData =
+                {
+                    name: displayName,
+                    image: imageUrl,
+                    publicherName: ''
+                };
 
-            ref
-            .child('profiles')
-            .child(profileId)
-            .set(profileData);
+                ref
+                .child('profiles')
+                .child(profileId)
+                .set(profileData);
 
-            var accountData =
-            {
-                provider: provider,
-                profileId: profileId
-            };
+                var accountData =
+                {
+                    provider: provider,
+                    profileId: profileId
+                };
 
-            accountData[provider] = providerData;
+                accountData[provider] = providerData;
 
-            accountRef.set(accountData);
+                accountRef.set(accountData);
+            });
+
         });
     };
+
+    function getProfilePicture(provider, providerData, callback)
+    {
+        if(provider === 'facebook')
+        {
+            callback('http://graph.facebook.com/' + providerData.id + '/picture?type=square');
+        }
+        else if(provider === 'google')
+        {
+            $http.get('http://picasaweb.google.com/data/entry/api/user/' + providerData.id + '?alt=json')
+            .success(function(data)
+            {
+                callback(data.entry.gphoto$thumbnail.$t);
+            })
+            .error(function()
+            {
+                callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
+            });
+        }
+        else
+        {
+            callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
+        }
+    }
 }]);
 

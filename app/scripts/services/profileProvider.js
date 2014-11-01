@@ -6,11 +6,12 @@ angular
 {
     var ref = new Firebase(FBURL);
 
-    var currentProfileSubject = new Rx.BehaviorSubject({id: undefined, profile: undefined});
+    var currentSubject = new Rx.BehaviorSubject(null);
 
     (function()
     {
         var profileRef;
+        var accountRef;
 
         ref.onAuth(function(authData)
         {
@@ -19,18 +20,37 @@ angular
                 profileRef.off();
             }
 
+            if(accountRef)
+            {
+                accountRef.off();
+            }
+
             if(!authData)
             {
-                currentProfileSubject.onNext({id: undefined, profile: undefined});
+                currentSubject.onNext(null);
                 return;
             }
 
+            accountRef =
             ref
             .child('accounts')
-            .child(authData.uid)
-            .once('value', function(snap)
+            .child(authData.uid);
+
+            accountRef
+            .on('value', function(snap)
             {
                 var account = snap.val();
+
+                if(profileRef)
+                {
+                    profileRef.off();
+                }
+
+                if(!account)
+                {
+                    currentSubject.onNext(null);
+                    return;
+                }
 
                 var profileId = account.profileId;
 
@@ -42,14 +62,17 @@ angular
                 profileRef
                 .on('value', function(snap)
                 {
-                    currentProfileSubject.onNext({id: profileId, profile: snap.val()});
+                    var profile = snap.val();
+                    profile.id = profileId;
+
+                    currentSubject.onNext(profile);
                 });
             });
         });
     })();
 
-    this.getCurrentProfileObservable = function()
+    this.currentObservable = function()
     {
-        return currentProfileSubject;
+        return currentSubject;
     };
 }]);

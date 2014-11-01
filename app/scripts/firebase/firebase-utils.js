@@ -72,7 +72,7 @@ angular
                 .forEach(function(key)
                 {
                     var promise =
-                    loadObject(snapVal[key], spec)
+                    loadObject(snapVal[key], spec, key)
                     .then(function (res)
                     {
                         result[key] = res;
@@ -110,7 +110,7 @@ angular
         {
             var snapVal = snap.val();
 
-            loadObject(snapVal, spec)
+            loadObject(snapVal, spec, id)
             .then(function (result)
             {
                 resultDeferred.resolve(result);
@@ -120,7 +120,7 @@ angular
         return resultDeferred.promise;
     }
 
-    function loadObject(obj, spec)
+    function loadObject(obj, spec, key)
     {
         var result = {};
 
@@ -145,7 +145,7 @@ angular
             }
             else if (specType === 'function')
             {
-                result[prop] = specVal(obj);
+                result[prop] = specVal(obj, key);
             }
             else if (specType === 'object')
             {

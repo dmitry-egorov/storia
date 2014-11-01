@@ -33,7 +33,8 @@ angular
     'ngResource',
     'ngRoute',
     'ngSanitize',
-    'ngTouch'
+    'ngTouch',
+    'ngOrderObjectBy'
 ])
 .config(function ($routeProvider)
 {

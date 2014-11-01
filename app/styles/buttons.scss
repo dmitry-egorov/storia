@@ -1,0 +1,18 @@
+@mixin st-button($type: 'blue')
+{
+  @extend .btn;
+  @extend .btn-sm;
+
+  @if $type == 'blue'
+  {
+      @extend .btn-primary;
+  }
+  @else if $type == 'green'
+  {
+      @extend .btn-success;
+  }
+  @else if $type == 'gray'
+  {
+      @include button-variant(#aaa, #eee, #ccc);
+  }
+}

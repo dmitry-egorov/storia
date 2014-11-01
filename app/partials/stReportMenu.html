@@ -1,0 +1,5 @@
+<div class="report-menu">
+    <button class="upvote-btn" ng-class="{upvoted: upvoted, 'not-upvoted': !upvoted}" ng-click="upvote(report.id)">
+        <span ng-bind="upvoted ? 'Upvoted' : 'Upvote'"></span>&nbsp;<span class="votes-count" ng-bind="report.votes"></span>
+    </button>
+</div>

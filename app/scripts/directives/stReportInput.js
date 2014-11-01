@@ -10,7 +10,7 @@ angular
         scope:
         {
             eventId: '=',
-            authorInfo: '='
+            author: '='
         },
         controller: function($scope)
         {
@@ -24,7 +24,7 @@ angular
 
             $scope.tryAddReport = function(eventId, text)
             {
-                var authorId = $scope.authorInfo.id;
+                var authorId = $scope.author.id;
                 if (!authorId)
                 {
                     return;

@@ -2,39 +2,19 @@
 
 angular
 .module('storiaApp')
-.directive('stHeader', ['ngDialog', '$firebase', 'FBURL', 'userStorage', function (ngDialog, $firebase, FBURL, userStorage)
+.directive('stHeader', ['ngDialog', 'profileProvider', 'authenticator', function (ngDialog, profileProvider, authenticator)
 {
     return {
         restrict: 'A',
         templateUrl: '/partials/stHeader.html',
         controller: function($scope)
         {
-            var ref = new Firebase(FBURL);
-
-            $scope.isLoggedIn = false;
-            $scope.name = '';
-
-            ref.onAuth(function(authData)
+            profileProvider
+            .currentObservable()
+            .$subscribe($scope, function(profile)
             {
-                $scope.$evalAsync(function()
-                {
-                    if (authData)
-                    {
-                        $scope.isLoggedIn = true;
-                        $scope.name = authData.facebook.displayName;
-
-                        var provider = authData.provider;
-                        var providerData = authData[provider];
-                        userStorage.tryCreateUser(authData.uid, provider, providerData, providerData.displayName);
-                    }
-                    else
-                    {
-                        $scope.isLoggedIn = false;
-                        $scope.name = '';
-                    }
-                });
+                $scope.name = (profile || {}).name;
             });
-
 
             $scope.addEvent = function()
             {
@@ -45,14 +25,14 @@ angular
                 });
             };
 
-            $scope.fbLogin = function()
+            $scope.login = function(provider)
             {
-                ref.authWithOAuthPopup('facebook', function() {});
+                authenticator.authWith(provider);
             };
 
             $scope.logout = function()
             {
-                ref.unauth();
+                authenticator.unauth();
             };
         }
     };

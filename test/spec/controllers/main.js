@@ -20,7 +20,7 @@ describe('Controller: MainCtrl', function ()
         });
     }));
 
-    it('should attach a events to the scope', function ()
+    it('should attach events to the scope', function ()
     {
         expect(scope.events).toBe(events);
     });
