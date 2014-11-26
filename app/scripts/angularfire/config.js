@@ -1,4 +1,3 @@
 angular
-.module('firebase.config', [])
-.constant('FBURL', 'https://storia-dev.firebaseio.com')
-;
+    .module('firebase.config', [])
+    .constant('FBURL', 'https://storia-dev.firebaseio.com');

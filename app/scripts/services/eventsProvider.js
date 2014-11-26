@@ -2,32 +2,30 @@
 
 angular
     .module('stServices')
-    .service('eventsProvider', ['FBURL', 'fbutils', 'helper', function (FBURL, fbutils, helper)
-    {
+    .service('eventsProvider', ['FBURL', 'fbutils', 'helper', function (FBURL, fbutils, helper) {
         var ref = new Firebase(FBURL);
         var eventsPerFetch = 4;
         var currentLimit = eventsPerFetch;
 
-        this.getHomeEventsPromise = function ()
-        {
+        this.getHomeEventsPromise = function () {
             return fbutils
                 .viewPromise({
-                    _listRef    : ref.child('events').orderByChild('addedOn').limitToLast(currentLimit),
-                    id          : getId,
-                    title       : true,
-                    addedOn     : true,
+                    _listRef: ref.child('events').orderByChild('addedOn').limitToLast(currentLimit),
+                    id: getId,
+                    title: true,
+                    addedOn: true,
                     reportsCount: getReportsCount,
-                    preview     : {
-                        _key   : 'previewId',
-                        _ref   : ref.child('reports'),
-                        id     : getId,
+                    preview: {
+                        _key: 'previewId',
+                        _ref: ref.child('reports'),
+                        id: getId,
                         content: true,
-                        author : authorSpec(),
-                        votes  : getVotes
+                        author: authorSpec(),
+                        votes: getVotes
                     }
                 })
                 .then(function (events) {
-                  return Object.values(events).sortBy('addedOn', true);
+                    return Object.values(events).sortBy('addedOn', true);
                 })
                 .then(function (events) {
                     currentLimit = events.length + eventsPerFetch;
@@ -36,52 +34,48 @@ angular
                 });
         };
 
-        this.getEventPromise = function (id)
-        {
+        this.getEventPromise = function (id) {
             helper.assertDefined(id);
 
             return fbutils
                 .cached('event/' + id)
                 .viewPromise(
                 {
-                    _ref        : ref.child('events'),
-                    id          : getId,
-                    title       : true,
+                    _ref: ref.child('events'),
+                    id: getId,
+                    title: true,
                     reportsCount: getReportsCount,
-                    reports     : {
+                    reports: {
                         _listRef: ref.child('reports'),
-                        id      : getId,
-                        content : true,
-                        author  : authorSpec(),
-                        votes   : getVotes
+                        id: getId,
+                        content: true,
+                        author: authorSpec(),
+                        votes: getVotes
                     }
                 }, id);
         };
 
-        function authorSpec()
-        {
+        function authorSpec() {
             return {
-                _key         : 'authorId',
-                _ref         : ref.child('profiles'),
-                id           : getId,
-                image        : true,
-                name         : true,
-                publisherName: true
+                _key: 'authorId',
+                _ref: ref.child('profiles'),
+                id: getId,
+                image: true,
+                name: true,
+                publisherName: true,
+                addedOn: true
             };
         }
 
-        function getVotes(report)
-        {
+        function getVotes(report) {
             return helper.count(report.upvotedBy);
         }
 
-        function getReportsCount(event)
-        {
+        function getReportsCount(event) {
             return helper.count(event.reports);
         }
 
-        function getId(obj, key)
-        {
+        function getId(obj, key) {
             return key;
         }
     }]);
