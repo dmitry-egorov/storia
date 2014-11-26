@@ -9,17 +9,17 @@ module StoriaApp
         private eventsPerFetch = 4;
         private currentLimit: number;
 
-        public static $inject = ['fbref', 'fbutils'];
+        public static $inject = ['fbref', 'ViewGenerator'];
 
-        constructor(private fb: Firebase, private fbutils)
+        constructor(private fb: Firebase, private fbutils: FirebaseUtils.ViewGenerator)
         {
             this.currentLimit = this.eventsPerFetch;
         }
 
         public getHomeEventsPromise(): ng.IPromise<any>
         {
-            return this.fbutils
-                    .viewPromise({
+            return this.fbutils.viewPromise(
+                    {
                         _listRef: this.fb.child('events').orderByChild('addedOn').limitToLast(this.currentLimit),
                         id: StoriaApp.EventsProvider.getId,
                         title: true,
@@ -33,7 +33,7 @@ module StoriaApp
                             author: this.authorSpec(),
                             votes: StoriaApp.EventsProvider.getVotes
                         }
-                    })
+                    }, null)
                     .then((events) => ObjectEx.values(events).sortBy('addedOn', true))
                     .then((events) =>
                     {

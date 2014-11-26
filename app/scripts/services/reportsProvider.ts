@@ -14,7 +14,7 @@ module StoriaApp
         {
             Assert.defined(reportId);
 
-            return Rx.Observable.create(function (observer)
+            return Rx.Observable.create((observer) =>
             {
                 var votedByRef = this.fb
                         .child('reports')
@@ -43,32 +43,30 @@ module StoriaApp
             {
                 var upvotedRef;
 
-                var currentSubs = this.profileProvider
-                        .currentObservable()
-                        .subscribe((profile) =>
-                        {
-                            if (upvotedRef)
-                            {
-                                upvotedRef.off();
-                            }
+                var currentSubs = this.profileProvider.currentObservable().subscribe((profile) =>
+                {
+                    if (upvotedRef)
+                    {
+                        upvotedRef.off();
+                    }
 
-                            if (!profile)
-                            {
-                                observer.onNext(false);
-                                return;
-                            }
+                    if (!profile)
+                    {
+                        observer.onNext(false);
+                        return;
+                    }
 
-                            upvotedRef = this.fb
-                                    .child('reports')
-                                    .child(reportId)
-                                    .child('upvotedBy')
-                                    .child(profile.id);
+                    upvotedRef = this.fb
+                            .child('reports')
+                            .child(reportId)
+                            .child('upvotedBy')
+                            .child(profile.id);
 
-                            upvotedRef.on('value', (snap) =>
-                            {
-                                observer.onNext(!!snap.val());
-                            });
-                        });
+                    upvotedRef.on('value', (snap) =>
+                    {
+                        observer.onNext(!!snap.val());
+                    });
+                });
 
                 return () =>
                 {

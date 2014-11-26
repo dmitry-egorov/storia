@@ -1,157 +1,170 @@
 'use strict';
 
-angular
-    .module('firebaseUtils')
-    .service('fbutils', ['$q', function ($q) {
-        var self = this;
+module FirebaseUtils
+{
+    export class ViewGenerator
+    {
+        private cache: Object;
 
-        var cache = {};
+        public static $inject = ['$q'];
 
-        self.cached = function (key) {
+        constructor(private $q)
+        {
+            this.cache = {};
+        }
+
+        public cached(key: string)
+        {
             return {
-                viewPromise: function (spec, id)//TODO: get key from spec + id
+                viewPromise: (spec, id) => //TODO: get key from spec + id
                 {
-                    var cached = cache[key];
-                    if (cached) {
+                    var cached = this.cache[key];
+                    if (cached)
+                    {
                         return cached;
                     }
 
-                    var viewPromise = self.viewPromise(spec, id);
+                    var viewPromise = this.viewPromise(spec, id);
 
-                    cache[key] = viewPromise;
+                    this.cache[key] = viewPromise;
 
                     return viewPromise;
                 }
             };
-        };
+        }
 
-        self.viewPromise = function (spec, id) {
-            var resultDeferred = $q.defer();
+        public viewPromise(spec: Object, id)
+        {
+            var resultDeferred = this.$q.defer();
 
-            if (spec._listRef && id) {
+            if (spec['_listRef'] && id)
+            {
                 var result = {};
                 var promises = [];
-                var idsListRef = spec._listRef;
+                var idsListRef = spec['_listRef'];
 
-                Object
-                    .keys(id)
-                    .forEach(function (key) {
-                        var promise =
-                            loadRef(key, idsListRef, spec)
-                                .then(function (obj) {
-                                    result[key] = obj;
-                                });
+                Object.keys(id).forEach((key) =>
+                {
+                    var promise = this.loadRef(key, idsListRef, spec).then(function (obj)
+                    {
+                        result[key] = obj;
+                    });
+
+                    promises.push(promise);
+                });
+
+                this.$q.all(promises).then(() =>
+                {
+                    resultDeferred.resolve(result);
+                });
+            }
+            else if (spec['_listRef'])
+            {
+                var listRef: Firebase = spec['_listRef'];
+
+                listRef.once('value', (snap) =>
+                {
+                    var promises = [];
+                    var result = {};
+                    var snapVal = snap.val();
+
+                    Object.keys(snapVal).forEach((key) =>
+                    {
+                        var promise = this.loadObject(snapVal[key], spec, key).then(function (res)
+                        {
+                            result[key] = res;
+                        });
 
                         promises.push(promise);
                     });
 
-                $q
-                    .all(promises)
-                    .then(function () {
+                    this.$q.all(promises).then(() =>
+                    {
                         resultDeferred.resolve(result);
                     });
-            }
-            else if (spec._listRef) {
-                var listRef = spec._listRef;
-
-                listRef
-                    .once('value', function (snap) {
-                        var promises = [];
-                        var result = {};
-                        var snapVal = snap.val();
-
-                        Object
-                            .keys(snapVal)
-                            .forEach(function (key) {
-                                var promise =
-                                    loadObject(snapVal[key], spec, key)
-                                        .then(function (res) {
-                                            result[key] = res;
-                                        });
-
-                                promises.push(promise);
-                            });
-
-                        $q
-                            .all(promises)
-                            .then(function () {
-                                resultDeferred.resolve(result);
-                            });
-                    });
-            }
-            else if (spec._ref) {
-                var ref = spec._ref;
-
-                return loadRef(id, ref, spec);
-            }
-
-            return resultDeferred.promise;
-        };
-
-        function loadRef(id, ref, spec) {
-            var resultDeferred = $q.defer();
-
-            if (id) {
-                ref = ref.child(id);
-            }
-
-            ref
-                .once('value', function (snap) {
-                    var snapVal = snap.val();
-
-                    loadObject(snapVal, spec, id)
-                        .then(function (result) {
-                            resultDeferred.resolve(result);
-                        });
                 });
+            }
+            else if (spec['_ref'])
+            {
+                var ref = spec['_ref'];
+
+                return this.loadRef(id, ref, spec);
+            }
 
             return resultDeferred.promise;
         }
 
-        function loadObject(obj, spec, key) {
+        private loadRef(id, ref, spec)
+        {
+            var resultDeferred = this.$q.defer();
+
+            if (id)
+            {
+                ref = ref.child(id);
+            }
+
+            ref.once('value', (snap) =>
+            {
+                var snapVal = snap.val();
+
+                this.loadObject(snapVal, spec, id).then((result) =>
+                {
+                    resultDeferred.resolve(result);
+                });
+            });
+
+            return resultDeferred.promise;
+        }
+
+
+        private loadObject(obj, spec, key)
+        {
             var result = {};
 
             var promises = [];
 
-            Object
-                .keys(spec)
-                .forEach(function (prop) {
-                    if (prop === '_ref' || prop === '_listRef' || prop === '_key') {
+            Object.keys(spec).forEach((prop) =>
+            {
+                if (prop === '_ref' || prop === '_listRef' || prop === '_key')
+                {
+                    return;
+                }
+
+                var specVal = spec[prop];
+                var val = obj[prop];
+                var specType = typeof(specVal);
+
+                if (specType === 'boolean')
+                {
+                    result[prop] = val;
+                }
+                else if (specType === 'function')
+                {
+                    result[prop] = specVal(obj, key);
+                }
+                else if (specType === 'object')
+                {
+                    var idProp = specVal._key || prop;
+                    var id = obj[idProp];
+
+                    if (!id)
+                    {
                         return;
                     }
 
-                    var specVal = spec[prop];
-                    var val = obj[prop];
-                    var specType = typeof(specVal);
+                    var promise = this.viewPromise(specVal, id).then(function (res)
+                    {
+                        result[prop] = res;
+                    });
 
-                    if (specType === 'boolean') {
-                        result[prop] = val;
-                    }
-                    else if (specType === 'function') {
-                        result[prop] = specVal(obj, key);
-                    }
-                    else if (specType === 'object') {
-                        var idProp = specVal._key || prop;
-                        var id = obj[idProp];
+                    promises.push(promise);
+                }
+            });
 
-                        if (!id) {
-                            return;
-                        }
-
-                        var promise =
-                            self
-                                .viewPromise(specVal, id)
-                                .then(function (res) {
-                                    result[prop] = res;
-                                });
-
-                        promises.push(promise);
-                    }
-                });
-
-            return $q.all(promises).then(function () {
+            return this.$q.all(promises).then(() =>
+            {
                 return result;
             });
         }
-    }]);
-
+    }
+}

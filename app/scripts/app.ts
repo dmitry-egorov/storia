@@ -28,7 +28,6 @@ angular
         [
             'firebase',
             'utils',
-            'firebaseUtils',
             'firebase.config',
             'stServices',
             'ngDialog',
@@ -48,6 +47,7 @@ angular
         .service('ReportsProvider', StoriaApp.ReportsProvider)
         .service('ReportsStorage', StoriaApp.ReportsStorage)
         .service('UserStorage', StoriaApp.UserStorage)
+        .service('ViewGenerator', FirebaseUtils.ViewGenerator)
         .config(function ($routeProvider: ng.route.IRouteProvider)
         {
             $routeProvider
