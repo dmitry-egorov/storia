@@ -1,13 +1,17 @@
 'use strict';
+module StoriaApp
+{
+    export class ReportsStorage
+    {
+        public static $inject = ['fbref'];
 
-angular
-    .module('stServices')
-    .service('reportsStorage', ['FBURL', function (FBURL) {
-        var ref = new Firebase(FBURL);
+        constructor(private fb: Firebase)
+        {
+        }
 
-        this.addReport = function (eventId, authorId, content) {
-            var key =
-                ref
+        addReport(eventId: string, authorId: string, content: string)
+        {
+            var key = this.fb
                     .child('reports')
                     .push(
                     {
@@ -18,35 +22,35 @@ angular
                     })
                     .name();
 
-            ref
-                .child('events')
-                .child(eventId)
-                .child('reports')
-                .child(key)
-                .set(true);
-        };
+            this.fb.child('events')
+                    .child(eventId)
+                    .child('reports')
+                    .child(key)
+                    .set(true);
+        }
 
-        this.upvote = function (reportId, userId) {
+        upvote(reportId: string, userId: string)
+        {
             Assert.defined(reportId);
             Assert.defined(userId);
 
-            var upvotedRef =
-                ref
+            var upvotedRef = this.fb
                     .child('reports')
                     .child(reportId)
                     .child('upvotedBy')
                     .child(userId);
 
-            upvotedRef.once('value', function (snap) {
-                if (snap.val()) {
+            upvotedRef.once('value', (snap) =>
+            {
+                if (snap.val())
+                {
                     upvotedRef.remove();
                 }
-                else {
+                else
+                {
                     upvotedRef.set(true);
                 }
             });
-
-
-        };
-    }]);
-
+        }
+    }
+}

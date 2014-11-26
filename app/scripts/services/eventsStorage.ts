@@ -1,31 +1,36 @@
 'use strict';
 
-angular
-    .module('stServices')
-    .service('eventsStorage', ['FBURL', '$q', function (FBURL, $q) {
-        var ref = new Firebase(FBURL);
+module StoriaApp
+{
+    export class EventsStorage
+    {
+        public static $inject = ['fbref', '$q'];
+        constructor(private fb: Firebase, private $q: ng.IQService)
+        {
+        }
 
-        this.addEventPromiseId = function (title: string) {
+        public addEventPromiseId(title: string): ng.IPromise<string>
+        {
             var id = Encoder.encodeId(title);
+            var eventRef = this.fb.child('events').child(id);
+            var deferred = this.$q.defer<string>();
 
-            var eventRef = ref.child('events').child(id);
-
-            var deferred = $q.defer();
-
-            eventRef.once('value', function (snapshot) {
-                if (snapshot.val()) {
+            eventRef.once('value', function (snapshot)
+            {
+                if (snapshot.val())
+                {
                     return;
                 }
 
                 eventRef.set({
-                    title: title,
-                    addedOn: Firebase.ServerValue.TIMESTAMP
-                }, function () {
-                    deferred.resolve(id);
-                });
+                            title: title,
+                            addedOn: Firebase.ServerValue.TIMESTAMP
+                        },
+                        () => deferred.resolve(id)
+                );
             });
 
             return deferred.promise;
-        };
-    }]);
-
+        }
+    }
+}

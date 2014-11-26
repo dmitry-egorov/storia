@@ -1,35 +1,40 @@
 'use strict';
 
-angular
-    .module('stServices')
-    .service('userStorage', ['FBURL', '$http', function (FBURL, $http) {
-        this.tryCreateUser = function (uid, provider, providerData, displayName) {
-            var ref = new Firebase(FBURL);
+module StoriaApp
+{
+    export class UserStorage
+    {
+        public static $inject = ['fbref', '$http'];
 
-            var accountRef =
-                ref
+        constructor(private fb: Firebase, private $http: ng.IHttpService) {}
+
+        tryCreateUser(uid: string, provider: string, providerData, displayName: string)
+        {
+            var accountRef = this.fb
                     .child('accounts')
                     .child(uid);
 
-            accountRef.once('value', function (snapshot) {
-                if (snapshot.val() !== null) {
+            accountRef.once('value', (snapshot) =>
+            {
+                if (snapshot.val() !== null)
+                {
                     return;
                 }
 
                 var profileId = Encoder.encodeId(displayName);
 
-                getProfilePicture(provider, providerData, function (imageUrl) {
+                this.getProfilePicture(provider, providerData, (imageUrl) =>
+                {
                     var profileData =
                     {
                         name: displayName,
                         image: imageUrl,
-                        publicherName: ''
+                        publisherName: ''
                     };
 
-                    ref
-                        .child('profiles')
-                        .child(profileId)
-                        .set(profileData);
+                    this.fb.child('profiles')
+                            .child(profileId)
+                            .set(profileData);
 
                     var accountData =
                     {
@@ -43,24 +48,31 @@ angular
                 });
 
             });
-        };
+        }
 
-        function getProfilePicture(provider, providerData, callback) {
-            if (provider === 'facebook') {
+        private getProfilePicture(provider, providerData, callback)
+        {
+            if (provider === 'facebook')
+            {
                 callback('http://graph.facebook.com/' + providerData.id + '/picture?type=square');
             }
-            else if (provider === 'google') {
-                $http.get('http://picasaweb.google.com/data/entry/api/user/' + providerData.id + '?alt=json')
-                    .success(function (data) {
-                        callback(data.entry.gphoto$thumbnail.$t);
-                    })
-                    .error(function () {
-                        callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
-                    });
+            else if (provider === 'google')
+            {
+                this.$http
+                        .get('http://picasaweb.google.com/data/entry/api/user/' + providerData.id + '?alt=json')
+                        .success((data) =>
+                        {
+                            callback(data['entry']['gphoto$thumbnail']['$t']);
+                        })
+                        .error(function ()
+                        {
+                            callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
+                        });
             }
-            else {
+            else
+            {
                 callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
             }
         }
-    }]);
-
+    }
+}

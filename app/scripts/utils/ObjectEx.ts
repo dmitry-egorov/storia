@@ -9,7 +9,7 @@ module ObjectEx {
         return values;
     }
 
-    export function count(obj: Object) {
+    export function count(obj: Object): number {
         return Object.keys(obj || {}).length;
     }
 }

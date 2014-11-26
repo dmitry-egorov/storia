@@ -24,40 +24,48 @@ angular.module('stServices', ['firebase.config', 'utils']);
  * Main module of the application.
  */
 angular
-    .module('storiaApp',
-    [
-        'firebase',
-        'utils',
-        'firebaseUtils',
-        'firebase.config',
-        'stServices',
-        'ngDialog',
-        'ngAnimate',
-        'ngCookies',
-        'ngResource',
-        'ngRoute',
-        'ngSanitize',
-        'ngTouch',
-        'ngOrderObjectBy',
-        'infinite-scroll'
-    ])
-    .service('Authenticator', StoriaApp.Authenticator)
-    .config(function ($routeProvider: ng.route.IRouteProvider) {
-        $routeProvider
-            .when('/',
-            {
-                templateUrl: 'views/main.html',
-                controller: 'MainCtrl'
-            })
-            .when('/events/:id',
-            {
-                templateUrl: 'views/events.html',
-                controller: 'EventsCtrl'
-            })
-            .otherwise({
-                redirectTo: '/'
-            });
-    })
-    .run(['$rootScope', function ($rootScope) {
-        $rootScope._ = _;
-    }]);
+        .module('storiaApp',
+        [
+            'firebase',
+            'utils',
+            'firebaseUtils',
+            'firebase.config',
+            'stServices',
+            'ngDialog',
+            'ngAnimate',
+            'ngCookies',
+            'ngResource',
+            'ngRoute',
+            'ngSanitize',
+            'ngTouch',
+            'ngOrderObjectBy',
+            'infinite-scroll'
+        ])
+        .service('Authenticator', StoriaApp.Authenticator)
+        .service('EventsProvider', StoriaApp.EventsProvider)
+        .service('EventsStorage', StoriaApp.EventsStorage)
+        .service('ProfileProvider', StoriaApp.ProfileProvider)
+        .service('ReportsProvider', StoriaApp.ReportsProvider)
+        .service('ReportsStorage', StoriaApp.ReportsStorage)
+        .service('UserStorage', StoriaApp.UserStorage)
+        .config(function ($routeProvider: ng.route.IRouteProvider)
+        {
+            $routeProvider
+                    .when('/',
+                    {
+                        templateUrl: 'views/main.html',
+                        controller: 'MainCtrl'
+                    })
+                    .when('/events/:id',
+                    {
+                        templateUrl: 'views/events.html',
+                        controller: 'EventsCtrl'
+                    })
+                    .otherwise({
+                        redirectTo: '/'
+                    });
+        })
+        .run(['$rootScope', function ($rootScope)
+        {
+            $rootScope._ = _;
+        }]);

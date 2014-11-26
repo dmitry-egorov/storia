@@ -2,7 +2,7 @@
 
 angular
     .module('storiaApp')
-    .directive('stReportMenu', ['reportsStorage', 'profileProvider', 'reportsProvider', function (reportsStorage, profileProvider, reportsProvider) {
+    .directive('stReportMenu', ['ReportsStorage', 'ProfileProvider', 'ReportsProvider', function (reportsStorage:StoriaApp.ReportsStorage, profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider) {
         return {
             restrict: 'A',
             templateUrl: '/partials/stReportMenu.html',

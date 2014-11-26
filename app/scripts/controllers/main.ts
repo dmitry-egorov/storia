@@ -9,7 +9,7 @@
  */
 angular
     .module('storiaApp')
-    .controller('MainCtrl', ['$scope', 'eventsProvider', function ($scope, eventsProvider) {
+    .controller('MainCtrl', ['$scope', 'EventsProvider', function ($scope, eventsProvider: StoriaApp.EventsProvider) {
         $scope.loading = false;
         $scope.moreEvents = function () {
             $scope.loading = true;

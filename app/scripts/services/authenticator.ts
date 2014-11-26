@@ -1,39 +1,37 @@
 'use strict';
 
-module StoriaApp {
-  export class Authenticator {
+module StoriaApp
+{
+    export class Authenticator
+    {
+        public static $inject = ['fbref', 'UserStorage'];
+        constructor(private fb: Firebase, private userStorage: StoriaApp.UserStorage)
+        {
+            this.fb.onAuth(a => this.tryRegisterUser(a));
+        }
 
-    private ref:Firebase;
-    private userStorage;
+        public authWith(provider)
+        {
+            this.fb.authWithOAuthPopup(provider, () => {});
+        }
 
-    public static $inject = ['FBURL', 'userStorage'];
+        public unauth()
+        {
+            this.fb.unauth();
+        }
 
-    constructor(FBURL, userStorage) {
-      this.userStorage = userStorage;
-      this.ref = new Firebase(FBURL);
+        private tryRegisterUser(authData)
+        {
+            if (!authData)
+            {
+                return;
+            }
 
-      this.ref.onAuth(a => this.tryRegisterUser(a));
+            var provider = authData.provider;
+            var providerData = authData[provider];
+            var displayName = providerData.displayName;
+
+            this.userStorage.tryCreateUser(authData.uid, provider, providerData, displayName);
+        }
     }
-
-    public authWith(provider) {
-      this.ref.authWithOAuthPopup(provider, () => {
-      });
-    }
-
-    public unauth() {
-      this.ref.unauth();
-    }
-
-    private tryRegisterUser(authData) {
-      if (!authData) {
-        return;
-      }
-
-      var provider = authData.provider;
-      var providerData = authData[provider];
-      var displayName = providerData.displayName;
-
-      this.userStorage.tryCreateUser(authData.uid, provider, providerData, displayName);
-    }
-  }
 }

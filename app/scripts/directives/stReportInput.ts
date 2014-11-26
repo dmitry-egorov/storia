@@ -2,7 +2,7 @@
 
 angular
     .module('storiaApp')
-    .directive('stReportInput', ['reportsStorage', function (reportsStorage) {
+    .directive('stReportInput', ['ReportsStorage', function (reportsStorage: StoriaApp.ReportsStorage) {
         return {
             restrict: 'A',
             templateUrl: '/partials/stReportInput.html',

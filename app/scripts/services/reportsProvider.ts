@@ -1,72 +1,84 @@
 'use strict';
 
-angular
-    .module('stServices')
-    .service('reportsProvider', ['FBURL', 'profileProvider', function (FBURL, profileProvider) {
-        var ref = new Firebase(FBURL);
+module StoriaApp
+{
+    export class ReportsProvider
+    {
+        public static $inject = ['fbref', 'ProfileProvider'];
 
-        this.votesObservable = function (reportId) {
+        constructor(private fb: Firebase, private profileProvider: StoriaApp.ProfileProvider)
+        {
+        }
+
+        votesObservable(reportId: string)
+        {
             Assert.defined(reportId);
 
-            return Rx.Observable.create(function (observer) {
-                var votedByRef =
-                    ref
+            return Rx.Observable.create(function (observer)
+            {
+                var votedByRef = this.fb
                         .child('reports')
                         .child(reportId)
                         .child('upvotedBy');
 
-                votedByRef
-                    .on('value', function (snap) {
-                        var upvotedBy = snap.val();
+                votedByRef.on('value', (snap) =>
+                {
+                    var upvotedBy = snap.val();
 
-                        observer.onNext(ObjectEx.count(upvotedBy));
-                    });
+                    observer.onNext(ObjectEx.count(upvotedBy));
+                });
 
-                return function () {
+                return function ()
+                {
                     votedByRef.off();
                 };
             });
-        };
+        }
 
-        this.upvotedObservable = function (reportId) {
+        upvotedObservable(reportId)
+        {
             Assert.defined(reportId);
 
-            return Rx.Observable.create(function (observer) {
+            return Rx.Observable.create((observer) =>
+            {
                 var upvotedRef;
 
-                var currentSubs =
-                    profileProvider
+                var currentSubs = this.profileProvider
                         .currentObservable()
-                        .subscribe(function (profile) {
-                            if (upvotedRef) {
+                        .subscribe((profile) =>
+                        {
+                            if (upvotedRef)
+                            {
                                 upvotedRef.off();
                             }
 
-                            if (!profile) {
+                            if (!profile)
+                            {
                                 observer.onNext(false);
                                 return;
                             }
 
-                            upvotedRef =
-                                ref
+                            upvotedRef = this.fb
                                     .child('reports')
                                     .child(reportId)
                                     .child('upvotedBy')
                                     .child(profile.id);
 
-                            upvotedRef
-                                .on('value', function (snap) {
-                                    observer.onNext(!!snap.val());
-                                });
+                            upvotedRef.on('value', (snap) =>
+                            {
+                                observer.onNext(!!snap.val());
+                            });
                         });
 
-                return function () {
+                return () =>
+                {
                     currentSubs.dispose();
-                    if (upvotedRef) {
+                    if (upvotedRef)
+                    {
                         upvotedRef.off();
                     }
                 };
             });
-        };
-    }]);
-
+        }
+    }
+}

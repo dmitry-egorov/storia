@@ -2,7 +2,7 @@
 
 angular
     .module('storiaApp')
-    .directive('stHeader', ['ngDialog', 'profileProvider', 'Authenticator', function (ngDialog, profileProvider, authenticator: StoriaApp.Authenticator) {
+    .directive('stHeader', ['ngDialog', 'ProfileProvider', 'Authenticator', function (ngDialog, profileProvider: StoriaApp.ProfileProvider, authenticator: StoriaApp.Authenticator) {
         return {
             restrict: 'A',
             templateUrl: '/partials/stHeader.html',

@@ -9,8 +9,8 @@
  */
 angular
     .module('storiaApp')
-    .controller('EventsCtrl', ['$scope', '$routeParams', 'eventsProvider', 'profileProvider',
-        function ($scope, $routeParams, eventsProvider, profileProvider) {
+    .controller('EventsCtrl', ['$scope', '$routeParams', 'eventsProvider', 'ProfileProvider',
+        function ($scope, $routeParams, eventsProvider, profileProvider: StoriaApp.ProfileProvider) {
             var id = $routeParams.id;
 
             eventsProvider
