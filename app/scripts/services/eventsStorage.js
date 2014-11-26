@@ -1,33 +1,36 @@
 'use strict';
 
 angular
-.module ('stServices')
-.service('eventsStorage', ['FBURL', 'encoder', '$q', function(FBURL, encoder, $q)
-{
-    var ref = new Firebase(FBURL);
-
-    this.addEventPromiseId = function(title)
+    .module('stServices')
+    .service('eventsStorage', ['FBURL', 'encoder', '$q', function (FBURL, encoder, $q)
     {
-        var id = encoder.encodeId(title);
+        var ref = new Firebase(FBURL);
 
-        var eventRef = ref.child('events').child(id);
-
-        var deferred = $q.defer();
-
-        eventRef.once('value', function(snapshot)
+        this.addEventPromiseId = function (title)
         {
-            if (snapshot.val())
-            {
-                return;
-            }
+            var id = encoder.encodeId(title);
 
-            eventRef.set({title: title}, function ()
+            var eventRef = ref.child('events').child(id);
+
+            var deferred = $q.defer();
+
+            eventRef.once('value', function (snapshot)
             {
-                deferred.resolve(id);
+                if (snapshot.val())
+                {
+                    return;
+                }
+
+                eventRef.set({
+                    title  : title,
+                    addedOn: Firebase.ServerValue.TIMESTAMP
+                }, function ()
+                {
+                    deferred.resolve(id);
+                });
             });
-        });
 
-        return deferred.promise;
-    };
-}]);
+            return deferred.promise;
+        };
+    }]);
 

@@ -15,7 +15,8 @@ angular
         {
             authorId: authorId,
             eventId: eventId,
-            content: content
+            content: content,
+            addedOn: Firebase.ServerValue.TIMESTAMP
         })
         .name();
 

@@ -2,7 +2,7 @@
 
 angular
 .module ('firebaseUtils')
-.service('fb', ['$q', function($q)
+.service('fbutils', ['$q', function($q)
 {
     var self = this;
 
@@ -68,7 +68,7 @@ angular
                 var snapVal = snap.val();
 
                 Object
-                .keys(snap.val())
+                .keys(snapVal)
                 .forEach(function(key)
                 {
                     var promise =

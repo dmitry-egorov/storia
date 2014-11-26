@@ -34,7 +34,8 @@ angular
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'ngOrderObjectBy'
+    'ngOrderObjectBy',
+    'infinite-scroll'
 ])
 .config(function ($routeProvider)
 {
