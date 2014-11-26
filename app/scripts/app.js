@@ -49,10 +49,9 @@ angular
                 templateUrl: 'views/events.html',
                 controller: 'EventsCtrl'
             })
-            .otherwise
-        ({
-            redirectTo: '/'
-        });
+            .otherwise({
+                redirectTo: '/'
+            });
     })
     .run(['$rootScope', function ($rootScope) {
         $rootScope._ = _;
