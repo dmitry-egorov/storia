@@ -14,7 +14,7 @@ angular
     $scope.loading = false;
     $scope.moreEvents = function()
     {
-        $scope.loading = false;
+        $scope.loading = true;
 
         eventsProvider
         .getHomeEventsPromise()
