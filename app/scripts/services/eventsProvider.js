@@ -30,7 +30,7 @@ angular
                   return Object.values(events).sortBy('addedOn', true);
                 })
                 .then(function (events) {
-                    currentLimit += eventsPerFetch;
+                    currentLimit = events.length + eventsPerFetch;
 
                     return events;
                 });

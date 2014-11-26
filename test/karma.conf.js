@@ -30,6 +30,7 @@ module.exports = function(config) {
       'bower_components/angular-underscore-module/angular-underscore-module.js',
       'bower_components/ngDialog/js/ngDialog.js',
       'bower_components/firebase/firebase.js',
+      'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
       'bower_components/angularfire/dist/angularfire.min.js',
       'bower_components/rxjs/dist/rx.all.js',
       'bower_components/angular-order-object-by/src/ng-order-object-by.js',

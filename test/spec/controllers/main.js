@@ -22,6 +22,7 @@ describe('Controller: MainCtrl', function ()
 
     it('should attach events to the scope', function ()
     {
+        scope.moreEvents();
         expect(scope.events).toBe(events);
     });
 });
