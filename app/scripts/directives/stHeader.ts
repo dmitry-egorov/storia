@@ -1,31 +1,33 @@
 'use strict';
 
-angular
-    .module('storiaApp')
-    .directive('stHeader', ['ngDialog', 'ProfileProvider', 'Authenticator', function (ngDialog, profileProvider: StoriaApp.ProfileProvider, authenticator: StoriaApp.Authenticator) {
+angular.module('storiaApp').directive('stHeader', ['ngDialog', 'ProfileProvider', 'Authenticator',
+    (ngDialog, profileProvider: StoriaApp.ProfileProvider, authenticator: StoriaApp.Authenticator) =>
+    {
         return {
             restrict: 'A',
             templateUrl: '/partials/stHeader.html',
-            controller: function ($scope) {
-                profileProvider
-                    .currentObservable()
-                    .$subscribe($scope, function (profile) {
-                        $scope.name = (profile || {}).name;
-                    });
+            controller: ($scope) =>
+            {
+                profileProvider.currentObservable().$subscribe($scope, (profile) =>
+                {
+                    $scope.name = (profile || {}).name;
+                });
 
-                $scope.addEvent = function () {
-                    ngDialog.open(
-                        {
-                            template: 'views/addEvent.html',
-                            controller: 'AddEventCtrl'
-                        });
+                $scope.addEvent = () =>
+                {
+                    ngDialog.open({
+                        template: 'views/addEvent.html',
+                        controller: 'AddEventCtrl'
+                    });
                 };
 
-                $scope.login = function (provider) {
+                $scope.login = (provider) =>
+                {
                     authenticator.authWith(provider);
                 };
 
-                $scope.logout = function () {
+                $scope.logout = () =>
+                {
                     authenticator.unauth();
                 };
             }

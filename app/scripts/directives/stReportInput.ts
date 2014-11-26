@@ -1,8 +1,8 @@
 'use strict';
 
-angular
-    .module('storiaApp')
-    .directive('stReportInput', ['ReportsStorage', function (reportsStorage: StoriaApp.ReportsStorage) {
+angular.module('storiaApp').directive('stReportInput', ['ReportsStorage',
+    (reportsStorage: StoriaApp.ReportsStorage) =>
+    {
         return {
             restrict: 'A',
             templateUrl: '/partials/stReportInput.html',
@@ -10,17 +10,21 @@ angular
                 eventId: '=',
                 author: '='
             },
-            controller: function ($scope) {
+            controller: ($scope) =>
+            {
                 $scope.text = '';
                 $scope.expanded = false;
 
-                $scope.expandReportInput = function () {
+                $scope.expandReportInput = () =>
+                {
                     $scope.expanded = true;
                 };
 
-                $scope.tryAddReport = function (eventId, text) {
+                $scope.tryAddReport = (eventId, text) =>
+                {
                     var authorId = $scope.author.id;
-                    if (!authorId) {
+                    if (!authorId)
+                    {
                         return;
                     }
 

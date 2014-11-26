@@ -7,20 +7,17 @@
  * # AddEventCtrl
  * Controller of the storiaApp
  */
-angular
-        .module('storiaApp')
-        .controller('AddEventCtrl', ['$scope', 'EventsStorage', '$location', function ($scope, eventsStorage: StoriaApp.EventsStorage, $location)
+angular.module('storiaApp').controller('AddEventCtrl', ['$scope', 'EventsStorage', '$location',
+    ($scope, eventsStorage: StoriaApp.EventsStorage, $location)=>
+    {
+        $scope.title = '';
+        $scope.tryAddEvent = (title) =>
         {
-            $scope.title = '';
-            $scope.tryAddEvent = function (title)
+            eventsStorage.addEventPromiseId(title).then((id) =>
             {
-                eventsStorage
-                        .addEventPromiseId(title)
-                        .then(function (id)
-                        {
-                            $location.path('/events/' + id);
-                        });
+                $location.path('/events/' + id);
+            });
 
-                return true;
-            };
-        }]);
+            return true;
+        };
+    }]);

@@ -7,18 +7,18 @@
  * # MainCtrl
  * Controller of the storiaApp
  */
-angular
-    .module('storiaApp')
-    .controller('MainCtrl', ['$scope', 'EventsProvider', function ($scope, eventsProvider: StoriaApp.EventsProvider) {
+angular.module('storiaApp').controller('MainCtrl', ['$scope', 'EventsProvider',
+    ($scope, eventsProvider: StoriaApp.EventsProvider) =>
+    {
         $scope.loading = false;
-        $scope.moreEvents = function () {
+        $scope.moreEvents = function ()
+        {
             $scope.loading = true;
 
-            eventsProvider
-                .getHomeEventsPromise()
-                .then(function (events) {
-                    $scope.events = events;
-                    $scope.loading = false;
-                });
+            eventsProvider.getHomeEventsPromise().then((events) =>
+            {
+                $scope.events = events;
+                $scope.loading = false;
+            });
         };
     }]);
