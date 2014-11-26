@@ -2,7 +2,7 @@
 
 angular
     .module('stServices')
-    .service('reportsStorage', ['chance', 'FBURL', 'helper', function (chance, FBURL, helper) {
+    .service('reportsStorage', ['FBURL', function (FBURL) {
         var ref = new Firebase(FBURL);
 
         this.addReport = function (eventId, authorId, content) {
@@ -27,8 +27,8 @@ angular
         };
 
         this.upvote = function (reportId, userId) {
-            helper.assertDefined(reportId);
-            helper.assertDefined(userId);
+            Assert.defined(reportId);
+            Assert.defined(userId);
 
             var upvotedRef =
                 ref

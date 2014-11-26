@@ -1,38 +1,38 @@
 {
-  "name": "storia",
-  "version": "0.0.0",
-  "dependencies": {
-    "angular": "~1.2.0",
-    "json3": "~3.3.1",
-    "es5-shim": "~3.1.0",
-    "bootstrap-sass-official": "~3.2.0",
-    "angular-resource": "~1.2.0",
-    "angular-cookies": "~1.2.0",
-    "angular-sanitize": "~1.2.0",
-    "angular-animate": "~1.2.0",
-    "angular-touch": "~1.2.0",
-    "angular-route": "~1.2.0",
-    "underscore": "~1.7.0",
-    "angular-underscore-module": "~1.0.1",
-    "sassy-buttons": "*",
-    "ngDialog": "~0.3.2",
-    "chance": "~0.6.1",
-    "firebase": "~2.0.4",
-    "angularfire": "~0.9.0",
-    "underscore.string": "~2.3.3",
-    "rxjs": "~2.3.14",
-    "angular-order-object-by": "~1.1.0",
-    "font-awesome": "~4.2.0",
-    "bootstrap-social": "~4.8.0",
-    "jquery": "~2.1.1",
-    "ngInfiniteScroll": "~1.1.2"
-  },
-  "devDependencies": {
-    "angular-mocks": "~1.2.0",
-    "angular-scenario": "~1.2.0"
-  },
-  "appPath": "app",
-  "resolutions": {
-    "firebase": "~1.1.2"
-  }
+    "name": "storia",
+    "version": "0.0.0",
+    "dependencies": {
+        "angular": "~1.2.0",
+        "json3": "~3.3.1",
+        "es5-shim": "~3.1.0",
+        "bootstrap-sass-official": "~3.2.0",
+        "angular-resource": "~1.2.0",
+        "angular-cookies": "~1.2.0",
+        "angular-sanitize": "~1.2.0",
+        "angular-animate": "~1.2.0",
+        "angular-touch": "~1.2.0",
+        "angular-route": "~1.2.0",
+        "underscore": "~1.7.0",
+        "angular-underscore-module": "~1.0.1",
+        "sassy-buttons": "*",
+        "ngDialog": "~0.3.2",
+        "chance": "~0.6.1",
+        "firebase": "~2.0.4",
+        "angularfire": "~0.9.0",
+        "underscore.string": "~2.3.3",
+        "rxjs": "~2.3.14",
+        "angular-order-object-by": "~1.1.0",
+        "font-awesome": "~4.2.0",
+        "bootstrap-social": "~4.8.0",
+        "jquery": "~2.1.1",
+        "ngInfiniteScroll": "~1.1.2"
+    },
+    "devDependencies": {
+        "angular-mocks": "~1.2.0",
+        "angular-scenario": "~1.2.0"
+    },
+    "appPath": "app",
+    "resolutions": {
+        "firebase": "~1.1.2"
+    }
 }

@@ -2,11 +2,11 @@
 
 angular
     .module('stServices')
-    .service('eventsStorage', ['FBURL', 'encoder', '$q', function (FBURL, encoder, $q) {
+    .service('eventsStorage', ['FBURL', '$q', function (FBURL, $q) {
         var ref = new Firebase(FBURL);
 
-        this.addEventPromiseId = function (title) {
-            var id = encoder.encodeId(title);
+        this.addEventPromiseId = function (title: string) {
+            var id = Encoder.encodeId(title);
 
             var eventRef = ref.child('events').child(id);
 

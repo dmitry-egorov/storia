@@ -1,8 +1,10 @@
+/// <reference path="../utils/Assert.ts" />
+
 'use strict';
 
 angular
     .module('stServices')
-    .service('eventsProvider', ['FBURL', 'fbutils', 'helper', function (FBURL, fbutils, helper) {
+    .service('eventsProvider', ['FBURL', 'fbutils', function (FBURL, fbutils) {
         var ref = new Firebase(FBURL);
         var eventsPerFetch = 4;
         var currentLimit = eventsPerFetch;
@@ -25,7 +27,7 @@ angular
                     }
                 })
                 .then(function (events) {
-                    return Object.values(events).sortBy('addedOn', true);
+                    return ObjectEx.values(events).sortBy('addedOn', true);
                 })
                 .then(function (events) {
                     currentLimit = events.length + eventsPerFetch;
@@ -35,7 +37,7 @@ angular
         };
 
         this.getEventPromise = function (id) {
-            helper.assertDefined(id);
+            Assert.defined(id);
 
             return fbutils
                 .cached('event/' + id)
@@ -68,11 +70,11 @@ angular
         }
 
         function getVotes(report) {
-            return helper.count(report.upvotedBy);
+            return ObjectEx.count(report.upvotedBy);
         }
 
         function getReportsCount(event) {
-            return helper.count(event.reports);
+            return ObjectEx.count(event.reports);
         }
 
         function getId(obj, key) {

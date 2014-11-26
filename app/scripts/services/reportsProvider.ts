@@ -2,11 +2,11 @@
 
 angular
     .module('stServices')
-    .service('reportsProvider', ['FBURL', 'helper', 'profileProvider', function (FBURL, helper, profileProvider) {
+    .service('reportsProvider', ['FBURL', 'profileProvider', function (FBURL, profileProvider) {
         var ref = new Firebase(FBURL);
 
         this.votesObservable = function (reportId) {
-            helper.assertDefined(reportId);
+            Assert.defined(reportId);
 
             return Rx.Observable.create(function (observer) {
                 var votedByRef =
@@ -19,7 +19,7 @@ angular
                     .on('value', function (snap) {
                         var upvotedBy = snap.val();
 
-                        observer.onNext(helper.count(upvotedBy));
+                        observer.onNext(ObjectEx.count(upvotedBy));
                     });
 
                 return function () {
@@ -29,7 +29,7 @@ angular
         };
 
         this.upvotedObservable = function (reportId) {
-            helper.assertDefined(reportId);
+            Assert.defined(reportId);
 
             return Rx.Observable.create(function (observer) {
                 var upvotedRef;

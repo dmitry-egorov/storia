@@ -34,9 +34,9 @@ module.exports = function(config) {
       'bower_components/angularfire/dist/angularfire.min.js',
       'bower_components/rxjs/dist/rx.all.js',
       'bower_components/angular-order-object-by/src/ng-order-object-by.js',
-      'app/scripts/**/*.js',
-      'test/mock/**/*.js',
-      'test/spec/**/*.js'
+      '.tmp/scripts/app/scripts/**/*.js',
+      '.tmp/spec/test/mock/**/*.js',
+      '.tmp/spec/test/spec/**/*.js'
     ],
 
     // list of files / patterns to exclude

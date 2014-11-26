@@ -1,13 +1,19 @@
-'use strict';
+/// <reference path="../../typings/angularjs/angular.d.ts" />
+/// <reference path="../../typings/angularjs/angular-route.d.ts" />
+/// <reference path="../../typings/angularjs/angular-resource.d.ts" />
+/// <reference path="../../typings/angularjs/angular-sanitize.d.ts" />
+/// <reference path="../../typings/firebase/firebase-custom.d.ts" />
+/// <reference path="../../typings/underscore/underscore.d.ts" />
+/// <reference path="../../typings/rx/rx.d.ts" />
+/// <reference path="../../typings/rx/rx.binding.d.ts" />
+/// <reference path="services/authenticator.ts" />
 
-angular.module('chance', []).factory('chance', function () {
-    return window.chance;
-});
+'use strict';
 
 angular.module('debug', []);
 angular.module('utils', []);
 angular.module('firebaseUtils', []);
-angular.module('stServices', ['firebase.config', 'chance', 'utils', 'debug']);
+angular.module('stServices', ['firebase.config', 'utils']);
 
 /**
  * @ngdoc overview
@@ -21,12 +27,10 @@ angular
     .module('storiaApp',
     [
         'firebase',
-        'debug',
         'utils',
         'firebaseUtils',
         'firebase.config',
         'stServices',
-        'chance',
         'ngDialog',
         'ngAnimate',
         'ngCookies',
@@ -37,7 +41,8 @@ angular
         'ngOrderObjectBy',
         'infinite-scroll'
     ])
-    .config(function ($routeProvider) {
+    .service('Authenticator', StoriaApp.Authenticator)
+    .config(function ($routeProvider: ng.route.IRouteProvider) {
         $routeProvider
             .when('/',
             {

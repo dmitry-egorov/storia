@@ -28,22 +28,7 @@ module.exports = function (grunt) {
 
         // Project settings
         yeoman: appConfig,
-        typescript: {
-            base: {
-                src: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
-                options: {
-                    target: 'es5',
-                    sourceMap: true
-                }
-            },
-            test: {
-                src: ['test/spec/{,*/}*.ts'],
-                options: {
-                    target: 'es5',
-                    sourceMap: true
-                }
-            }
-        },
+
         // Watches files for changes and runs tasks based on the changed files
         watch: {
             bower: {
@@ -52,11 +37,14 @@ module.exports = function (grunt) {
             },
             ts: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
-                tasks: ['typescript']
+                tasks: ['typescript:base'],
+                options: {
+                    livereload: '<%= connect.options.livereload %>'
+                }
             },
             tsTest: {
                 files: ['test/spec/{,*/}*.ts'],
-                tasks: ['typescript:test']
+                tasks: ['typescript:test', 'karma']
             },
             js: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.js'],
@@ -82,6 +70,7 @@ module.exports = function (grunt) {
                 },
                 files: [
                     '<%= yeoman.app %>/{,*/}*.html',
+                    '.tmp/scripts/{,*/}*.js',
                     '.tmp/styles/{,*/}*.css',
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
@@ -143,15 +132,8 @@ module.exports = function (grunt) {
             },
             all: {
                 src: [
-                    'Gruntfile.js',
-                    '<%= yeoman.app %>/scripts/{,*/}*.js'
+                    'Gruntfile.js'
                 ]
-            },
-            test: {
-                options: {
-                    jshintrc: 'test/.jshintrc'
-                },
-                src: ['test/spec/{,*/}*.js']
             }
         },
 
@@ -236,7 +218,27 @@ module.exports = function (grunt) {
                 ignorePath: /(\.\.\/){1,2}bower_components\//
             }
         },
-
+        typescript: {
+            base: {
+                src: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
+                dest: '.tmp/scripts',
+                options: {
+                    module: 'amd', //or commonjs
+                    target: 'es5', //or es3
+                    //'base_path': '<%= yeoman.app %>/scripts', //quoting base_path to get around jshint warning.
+                    sourcemap: true
+                }
+            },
+            test: {
+                src: ['test/spec/{,*/}*.ts', 'test/e2e/{,*/}*.ts'],
+                dest: '.tmp/spec',
+                options: {
+                    module: 'amd', //or commonjs
+                    target: 'es5', //or es3
+                    sourcemap: true
+                }
+            }
+        },
         // Compiles Sass to CSS and generates necessary files if requested
         compass: {
             options: {
@@ -450,13 +452,16 @@ module.exports = function (grunt) {
         // Run some tasks in parallel to speed up the build process
         concurrent: {
             server: [
-                'compass:server'
+                'compass:server',
+                'typescript:base'
             ],
             test: [
-                'compass'
+                'compass',
+                'typescript'
             ],
             dist: [
                 'compass:dist',
+                'typescript',
                 'imagemin',
                 'svgmin'
             ]
@@ -502,6 +507,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask('build', [
         'clean:dist',
+        'typescript',
         'wiredep',
         'useminPrepare',
         'concurrent:dist',

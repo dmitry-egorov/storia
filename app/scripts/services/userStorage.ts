@@ -2,7 +2,7 @@
 
 angular
     .module('stServices')
-    .service('userStorage', ['FBURL', 'encoder', '$http', function (FBURL, encoder, $http) {
+    .service('userStorage', ['FBURL', '$http', function (FBURL, $http) {
         this.tryCreateUser = function (uid, provider, providerData, displayName) {
             var ref = new Firebase(FBURL);
 
@@ -16,7 +16,7 @@ angular
                     return;
                 }
 
-                var profileId = encoder.encodeId(displayName);
+                var profileId = Encoder.encodeId(displayName);
 
                 getProfilePicture(provider, providerData, function (imageUrl) {
                     var profileData =
