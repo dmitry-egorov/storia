@@ -1,13 +1,13 @@
-<div class="event-details" ng-show="event">
+<div class="event-details" ng-show="vm.event">
     <header>
-        <h2>{{event.title}}</h2>
+        <h2>{{vm.event.title}}</h2>
     </header>
 
-    <div st-report-input event-id="event.id" author="currentProfile"></div>
+    <div st-report-input event-id="vm.event.id" author="vm.currentProfile"></div>
 
-    <div class="reports-count" st-reports-count count="event.reportsCount"></div>
+    <div class="reports-count" st-reports-count count="vm.event.reportsCount"></div>
 
-    <article ng-repeat="report in event.reports | orderObjectBy: 'votes' : true">
+    <article ng-repeat="report in vm.event.reports | orderBy: 'votes' : true">
         <div st-report report="report"></div>
         <div st-report-menu report="report"></div>
     </article>

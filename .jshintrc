@@ -22,7 +22,6 @@
     "angular": false,
     "Firebase": false,
     "fbDebug": false,
-    "_": true,
     "Rx": false
   }
 }

@@ -4,7 +4,7 @@
 
 module StoriaApp
 {
-    export class EventsProvider
+    export class EventsProvider implements IHomeProvider, IEventsProvider
     {
         private eventsPerFetch = 4;
         private currentLimit: number;
@@ -16,7 +16,7 @@ module StoriaApp
             this.currentLimit = this.eventsPerFetch;
         }
 
-        public getHomeEventsPromise(): ng.IPromise<any>
+        public getHomePromise(): ng.IPromise<any>
         {
             return this.fbutils.viewPromise(
                     {
@@ -34,7 +34,7 @@ module StoriaApp
                             votes: StoriaApp.EventsProvider.getVotes
                         }
                     }, null)
-                    .then((events) => ObjectEx.values(events).sortBy('addedOn', true))
+                    .then((events) => events.sortBy('addedOn', true))
                     .then((events) =>
                     {
                         this.currentLimit = events.length + this.eventsPerFetch;
@@ -47,9 +47,7 @@ module StoriaApp
         {
             Assert.defined(id);
 
-            return this.fbutils
-                    .cached('event/' + id)
-                    .viewPromise(
+            return this.fbutils.cached('event/' + id).viewPromise(
                     {
                         _ref: this.fb.child('events'),
                         id: StoriaApp.EventsProvider.getId,

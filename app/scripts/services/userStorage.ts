@@ -8,7 +8,7 @@ module StoriaApp
 
         constructor(private fb: Firebase, private $http: ng.IHttpService) {}
 
-        tryCreateUser(uid: string, provider: string, providerData, displayName: string)
+        public tryCreateUser(uid: string, provider: string, providerData, displayName: string)
         {
             var accountRef = this.fb
                     .child('accounts')
@@ -58,8 +58,7 @@ module StoriaApp
             }
             else if (provider === 'google')
             {
-                this.$http
-                        .get('http://picasaweb.google.com/data/entry/api/user/' + providerData.id + '?alt=json')
+                this.$http.get('http://picasaweb.google.com/data/entry/api/user/' + providerData.id + '?alt=json')
                         .success((data) =>
                         {
                             callback(data['entry']['gphoto$thumbnail']['$t']);

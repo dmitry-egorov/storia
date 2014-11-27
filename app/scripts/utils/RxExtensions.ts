@@ -2,31 +2,30 @@
 
 module Rx
 {
-    export interface Observable<T> {
+    export interface Observable<T>
+    {
         $subscribe($scope, callback);
         $bindTo($scope, prop: string);
     }
 
-    export interface ObservableStatic {
+    export interface ObservableStatic
+    {
         prototype: any;
     }
 
-    Observable.prototype.$subscribe = function ($scope, callback) {
-        var subs = this.subscribe(function (data) {
-            $scope.$evalAsync(function () {
-                callback(data);
-            });
+    Observable.prototype.$subscribe = function ($scope, callback)
+    {
+        var subs = this.subscribe((data) =>
+        {
+            $scope.$evalAsync(() => callback(data));
         });
 
-        $scope.$on('$destroy', function () {
-            subs.dispose();
-        });
+        $scope.$on('$destroy', () => subs.dispose());
     };
 
-    Observable.prototype.$bindTo = function ($scope, prop) {
-        this.$subscribe($scope, function (data) {
-            $scope[prop] = data;
-        });
+    Observable.prototype.$bindTo = function ($scope, prop)
+    {
+        this.$subscribe($scope, (data) => $scope[prop] = data);
     };
 }
 

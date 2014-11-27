@@ -2,7 +2,6 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
-@import 'sassy-buttons/_sassybuttons.sass';
 @import 'bootstrap-social/bootstrap-social.scss';
 @import 'buttons.scss';
 
@@ -226,11 +225,21 @@ body
         width: 100%;
     }
 
-    button
+    .ng-wig
     {
-        @include st-button;
+        background-color: #ffffff;
+    }
 
-        margin-top: 10px;
+    .active-input-area
+    {
+        @include clearfix;
+
+        button.write-report
+        {
+            @include st-button;
+
+            margin-top: 10px;
+        }
     }
 }
 

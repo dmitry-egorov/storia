@@ -1,5 +1,5 @@
-<div class="events-list" infinite-scroll="moreEvents()" infinite-scroll-disabled="loading">
-    <article ng-repeat="event in events">
+<div class="events-list" infinite-scroll="vm.moreEvents()" infinite-scroll-disabled="vm.loading">
+    <article ng-repeat="event in vm.events">
         <header>
             <h3>
                 <a ng-href="#/events/{{event.id}}">{{event.title}}</a>&nbsp

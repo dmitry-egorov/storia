@@ -39,15 +39,15 @@ module FirebaseUtils
 
             if (spec['_listRef'] && id)
             {
-                var result = {};
+                var result = [];
                 var promises = [];
                 var idsListRef = spec['_listRef'];
 
                 Object.keys(id).forEach((key) =>
                 {
-                    var promise = this.loadRef(key, idsListRef, spec).then(function (obj)
+                    var promise = this.loadRef(key, idsListRef, spec).then((obj) =>
                     {
-                        result[key] = obj;
+                        result.push(obj);
                     });
 
                     promises.push(promise);
@@ -64,15 +64,15 @@ module FirebaseUtils
 
                 listRef.once('value', (snap) =>
                 {
+                    var result = [];
                     var promises = [];
-                    var result = {};
                     var snapVal = snap.val();
 
                     Object.keys(snapVal).forEach((key) =>
                     {
-                        var promise = this.loadObject(snapVal[key], spec, key).then(function (res)
+                        var promise = this.loadObject(snapVal[key], spec, key).then((res) =>
                         {
-                            result[key] = res;
+                            result.push(res);
                         });
 
                         promises.push(promise);
@@ -152,7 +152,7 @@ module FirebaseUtils
                         return;
                     }
 
-                    var promise = this.viewPromise(specVal, id).then(function (res)
+                    var promise = this.viewPromise(specVal, id).then((res) =>
                     {
                         result[prop] = res;
                     });

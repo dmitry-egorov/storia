@@ -18,6 +18,7 @@ angular.module('storiaApp').directive('stReportInput', ['ReportsStorage',
                 $scope.expandReportInput = () =>
                 {
                     $scope.expanded = true;
+                    $scope.focused = true;
                 };
 
                 $scope.tryAddReport = (eventId, text) =>

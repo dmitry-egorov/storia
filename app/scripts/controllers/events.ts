@@ -1,21 +1,22 @@
+/// <reference path="../_all.ts" />
+
 'use strict';
 
-/**
- * @ngdoc function
- * @name storiaApp.controller:EventsCtrl
- * @description
- * # EventsCtrl
- * Controller of the storiaApp
- */
-angular.module('storiaApp').controller('EventsCtrl', ['$scope', '$routeParams', 'EventsProvider', 'ProfileProvider',
-    ($scope, $routeParams, eventsProvider: StoriaApp.EventsProvider, profileProvider: StoriaApp.ProfileProvider) =>
+module StoriaApp
+{
+    export class EventsController
     {
-        var id = $routeParams.id;
+        private event;
+        private currentProfile;
 
-        eventsProvider.getEventPromise(id).then(function (event)
+        public static $inject = ['$scope', '$routeParams', 'EventsProvider', 'ProfileProvider'];
+        constructor($scope, $routeParams, private eventsProvider: StoriaApp.IEventsProvider, private profileProvider: StoriaApp.ProfileProvider)
         {
-            $scope.event = event;
-        });
+            $scope.vm = this;
+            var id = $routeParams.id;
 
-        profileProvider.currentObservable().$bindTo($scope, 'currentProfile');
-    }]);
+            eventsProvider.getEventPromise(id).then((event) => this.event = event);
+            profileProvider.currentObservable().$subscribe($scope, p => this.currentProfile = p);
+        }
+    }
+}

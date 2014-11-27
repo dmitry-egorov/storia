@@ -1,24 +1,29 @@
+/// <reference path="../_all.ts" />
+
 'use strict';
 
-/**
- * @ngdoc function
- * @name storiaApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the storiaApp
- */
-angular.module('storiaApp').controller('MainCtrl', ['$scope', 'EventsProvider',
-    ($scope, eventsProvider: StoriaApp.EventsProvider) =>
+module StoriaApp
+{
+    export class MainController
     {
-        $scope.loading = false;
-        $scope.moreEvents = function ()
-        {
-            $scope.loading = true;
+        public loading: boolean = false;
+        public events: any = [];
 
-            eventsProvider.getHomeEventsPromise().then((events) =>
+        public static $inject = ['$scope', 'EventsProvider'];
+        constructor($scope, private eventsProvider: StoriaApp.IHomeProvider)
+        {
+            $scope.vm = this;
+        }
+
+        moreEvents()
+        {
+            this.loading = true;
+
+            this.eventsProvider.getHomePromise().then((events) =>
             {
-                $scope.events = events;
-                $scope.loading = false;
+                this.events = events;
+                this.loading = false;
             });
-        };
-    }]);
+        }
+    }
+}
