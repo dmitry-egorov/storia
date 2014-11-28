@@ -1,5 +1,52 @@
 'use strict';
 
+module StoriaApp
+{
+    export class ReportMenu
+    {
+        public canUpvote: boolean;
+        public report: Report;
+
+        constructor($scope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider)
+        {
+            $scope.$watch('report', report =>
+            {
+                this.report = report;
+
+                if (!report)
+                {
+                    return;
+                }
+
+                reportsProvider.upvotedObservable(report.id).withScope($scope).subscribe(upvoted =>
+                {
+                    this.canUpvote = !upvoted;
+                });
+
+                reportsProvider.votesObservable(report.id).withScope($scope).subscribe((count) =>
+                {
+                    this.report.votes = count;
+                });
+            });
+
+            $scope['vm'] = this;
+        }
+
+        upvote(reportId: string)
+        {
+            var profile = this.profileProvider.currentProfile();
+            if (profile)
+            {
+                this.reportsStorage.upvote(reportId, profile.id);
+            }
+            else
+            {
+                //TODO: show registration dialog
+            }
+        }
+    }
+}
+
 angular.module('storiaApp').directive('stReportMenu', ['ReportsStorage', 'ProfileProvider', 'ReportsProvider',
     (reportsStorage: StoriaApp.ReportsStorage, profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider) =>
     {
@@ -11,35 +58,7 @@ angular.module('storiaApp').directive('stReportMenu', ['ReportsStorage', 'Profil
             },
             controller: ($scope) =>
             {
-                if (!$scope.report)
-                {
-                    return;
-                }
-
-                $scope.upvoted = true;
-
-                reportsProvider.upvotedObservable($scope.report.id).withScope($scope).subscribe(upvoted =>
-                {
-                    $scope.upvoted = upvoted;
-                });
-
-                reportsProvider.votesObservable($scope.report.id).withScope($scope).subscribe((count) =>
-                {
-                    $scope.report.votes = count;
-                });
-
-                $scope.upvote = (reportId) =>
-                {
-                    var profile = profileProvider.currentProfile();
-                    if (profile)
-                    {
-                        reportsStorage.upvote(reportId, profile.id);
-                    }
-                    else
-                    {
-                        //TODO: show registration dialog
-                    }
-                };
+                new StoriaApp.ReportMenu($scope, reportsStorage, profileProvider, reportsProvider);
             }
         };
     }]);
