@@ -1,10 +1,18 @@
-<div class="input-area" ng-hide="vm.reported">
-    <textarea ng-hide="vm.expanded" name="ReportText" cols="40" rows="2" placeholder="Write your report" ng-click="vm.expandReportInput()"></textarea>
+<div class="input-area" ng-hide="vm.reported && !vm.expanded">
+    <textarea ng-hide="vm.expanded" name="ReportText" cols="40" rows="2" placeholder="Write your report"
+              ng-click="vm.expandReportInput('add')"></textarea>
+
     <div class="active-input-area" ng-show="vm.expanded">
         <div st-author-info profile="vm.author"></div>
         <textarea rows="3" ng-wig="vm.text"></textarea>
-        <button class="write-report" ng-click="vm.tryAddReport()">Write Report</button>
+        <div class="input-area-menu">
+            <button class="write-report" ng-show="vm.mode == 'add'" ng-click="vm.addReport()">Write Report</button>
+            <button class="edit-report" ng-show="vm.mode == 'edit'" ng-click="vm.editReport()">Edit Report</button>
+            <a ng-click="vm.cancel()" class="cancel-link">Cancel</a>
+        </div>
     </div>
 </div>
-<div class="input-area" ng-show="vm.reported">You have already reported on this event.</div>
+<div class="input-area" ng-show="vm.reported && !vm.expanded">You have already reported on this event. <a
+    ng-click="vm.expandReportInput('edit')">Edit</a>.
+</div>
 

@@ -4,7 +4,8 @@ interface Array<T>
     sortBy(key: string, desc: boolean): Array<T>;
     last():T;
     contains(item: T);
-    any(func: (item: any) => boolean): boolean;
+    any(func: (item: T) => boolean): boolean;
+    first(func: (item: T) => boolean): T;
 }
 
 Array.prototype.sortBy = function (key: string, desc: boolean)
@@ -33,17 +34,22 @@ Array.prototype.contains = function (item)
 
 Array.prototype.any = function (func: (item: any) => boolean): boolean
 {
+    return this.first(func) !== null;
+};
+
+Array.prototype.first = function (func: (item: any) => boolean): any
+{
     for (var i = 0; i < this.length; i++)
     {
         var item = this[i];
 
         if (func(item))
         {
-            return true;
+            return item;
         }
     }
 
-    return false;
+    return null;
 };
 
 

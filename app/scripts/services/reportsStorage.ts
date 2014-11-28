@@ -24,16 +24,11 @@ module StoriaApp
                     content: content,
                     addedOn: Firebase.ServerValue.TIMESTAMP
                 })
-                .name();
+                .key();
 
-            eventRef
-                .child('reports')
-                .child(key)
-                .set(true);
+            eventRef.child('reports').child(key).set(true);
 
-            eventRef
-                .child('previewId')
-                .set(key);
+            eventRef.child('previewId').set(key);
         }
 
         upvote(reportId: string, userId: string)
@@ -41,11 +36,7 @@ module StoriaApp
             Assert.defined(reportId);
             Assert.defined(userId);
 
-            var upvotedRef = this.fb
-                .child('reports')
-                .child(reportId)
-                .child('upvotedBy')
-                .child(userId);
+            var upvotedRef = this.fb.child('reports').child(reportId).child('upvotedBy').child(userId);
 
             upvotedRef.once('value', (snap) =>
             {
@@ -58,6 +49,21 @@ module StoriaApp
                     upvotedRef.set(true);
                 }
             });
+        }
+
+        editReport(reportId: string, text: string): void
+        {
+            var reportRef = this.fb.child('reports').child(reportId);
+
+            var contentRef = reportRef.child('content');
+
+            contentRef.once('value', snap =>
+            {
+                reportRef.child('history').push(snap.val());
+
+                contentRef.set(text);
+            });
+
         }
     }
 }

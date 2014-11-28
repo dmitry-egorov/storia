@@ -148,11 +148,6 @@ body
             padding-bottom: 10px;
         }
     }
-
-    .write-report
-    {
-        float: left;
-    }
 }
 
 .report
@@ -247,15 +242,19 @@ body
         background-color: #ffffff;
     }
 
-    .active-input-area
+    .input-area-menu
     {
-        @include clearfix;
+        line-height: 24px;
+        margin-top: 10px;
 
-        button.write-report
+        button.write-report, button.edit-report
         {
             @include st-button;
+        }
 
-            margin-top: 10px;
+        .cancel-link
+        {
+            color: gray;
         }
     }
 }

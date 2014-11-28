@@ -4,9 +4,9 @@ module StoriaApp
     {
         constructor(public id: string, public title: string, public reports: Array<Report>) {}
 
-        isCoveredBy(id: string): boolean
+        getReportOf(profileId: string): Report
         {
-            return this.reports.any(x => x.author.id == id);
+            return this.reports.first(x => x.author.id == profileId);
         }
     }
 }

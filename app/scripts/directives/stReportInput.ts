@@ -8,8 +8,9 @@ module StoriaApp
         expanded: boolean;
         author;
         reported: boolean;
+        mode: string;
 
-        private event;
+        private event: Event;
 
         constructor(private $scope: ng.IScope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider)
         {
@@ -20,66 +21,91 @@ module StoriaApp
             profileProvider.currentProfileObservable().withScope($scope).subscribe(currentProfile =>
             {
                 this.author = currentProfile;
-                this.updatedReported(currentProfile);
+                this.updateReported();
             });
 
             $scope.$watch('event', event => {
                 this.event = event;
-                this.updatedReported(this.author);
+                this.updateReported();
             });
 
             $scope['vm'] = this;
         }
 
-        expandReportInput()
+        expandReportInput(mode: string)
         {
+            if(mode == 'add')
+            {
+                this.text = '';
+            }
+            else if(mode == 'edit')
+            {
+                var report = this.getOwnReport();
+                this.text = report.content;
+            }
+            else
+            {
+                throw 'Invalid operation: no own report';
+            }
+
+            this.mode = mode;
             this.expanded = true;
         }
 
-        tryAddReport()
+        addReport()
         {
             if (!this.text)
             {
                 return;
             }
 
-            if(!this.event)
-            {
-                return;
-            }
-
             var authorId = this.author.id;
-            if (!authorId)
-            {
-                return;
-            }
+            var eventId = this.event.id;
 
-            this.reportsStorage.addReport(this.event.id, authorId, this.text);
+            this.reportsStorage.addReport(eventId, authorId, this.text);
 
             this.expanded = false;
             this.text = '';
-
-            return true;
         }
 
-        private updatedReported(currentProfile)
+        editReport()
         {
-            this.reported = this.hasReported(currentProfile);
-        }
-
-        private hasReported(currentProfile): boolean
-        {
-            if(!currentProfile)
+            if (!this.text)
             {
-                return false;
+                return;
+            }
+
+            var reportId = this.getOwnReport().id;
+
+            this.reportsStorage.editReport(reportId, this.text);
+
+            this.expanded = false;
+            this.text = '';
+        }
+
+        cancel()
+        {
+            this.expanded = false;
+        }
+
+        private updateReported()
+        {
+            this.reported = this.getOwnReport() !== null;
+        }
+
+        private getOwnReport(): Report
+        {
+            if(!this.author)
+            {
+                return null;
             }
 
             if(!this.event)
             {
-                return false;
+                return null;
             }
 
-            return this.event.isCoveredBy(currentProfile.id);
+            return this.event.getReportOf(this.author.id);
         }
     }
 }

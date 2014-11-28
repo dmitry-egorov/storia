@@ -54,7 +54,7 @@ declare class Firebase implements IFirebaseQuery {
     child(childPath: string): Firebase;
     parent(): Firebase;
     root(): Firebase;
-    name(): string;
+    key(): string;
     toString(): string;
     set(value: any, onComplete?: (error: any) => void): void;
     update(value: any, onComplete?: (error: any) => void): void;
