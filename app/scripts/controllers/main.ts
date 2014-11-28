@@ -10,9 +10,9 @@ module StoriaApp
         public events: any = [];
 
         public static $inject = ['$scope', 'EventsProvider'];
-        constructor($scope, private eventsProvider: StoriaApp.IHomeProvider)
+        constructor($scope: ng.IScope, private eventsProvider: StoriaApp.IHomeProvider)
         {
-            $scope.vm = this;
+            $scope['vm'] = this;
         }
 
         moreEvents()

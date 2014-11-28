@@ -4,6 +4,7 @@ module StoriaApp
 {
     export class ProfileProvider
     {
+        private current;
         private currentSubject: Rx.ISubject<any>;
         private profileRef: Firebase;
         private accountRef: Firebase;
@@ -16,43 +17,50 @@ module StoriaApp
             this.initSubject();
         }
 
-        currentObservable()
+        currentProfile()
+        {
+            return this.current;
+        }
+
+        currentProfileObservable(): Rx.Observable<any>
         {
             return this.currentSubject;
         }
 
         private initSubject(): void
         {
-            this.fb.onAuth((authData) =>
+            this.fb.onAuth((authData) => this.authChanged(authData));
+        }
+
+        private authChanged(authData)
+        {
+            if (this.profileRef)
             {
-                if (this.profileRef)
-                {
-                    this.profileRef.off();
-                }
+                this.profileRef.off();
+            }
 
-                if (this.accountRef)
-                {
-                    this.accountRef.off();
-                }
+            if (this.accountRef)
+            {
+                this.accountRef.off();
+            }
 
-                if (!authData)
-                {
-                    this.currentSubject.onNext(null);
-                    return;
-                }
+            if (!authData)
+            {
+                this.currentSubject.onNext(null);
+                return;
+            }
 
-                this.accountRef = this.fb
-                        .child('accounts')
-                        .child(authData.uid);
+            this.accountRef = this.fb
+                .child('accounts')
+                .child(authData.uid);
 
-                this.accountRef.on('value', (snap) =>
-                {
-                    this.accountChange(snap);
-                });
+            this.accountRef.on('value', (snap) =>
+            {
+                this.accountChange(snap);
             });
         }
 
-        accountChange(snap: IFirebaseDataSnapshot): void
+        private accountChange(snap: IFirebaseDataSnapshot): void
         {
             var account = snap.val();
 
@@ -70,14 +78,15 @@ module StoriaApp
             var profileId = account.profileId;
 
             this.profileRef = this.fb
-                    .child('profiles')
-                    .child(profileId);
+                .child('profiles')
+                .child(profileId);
 
             this.profileRef.on('value', (snap) =>
             {
                 var profile = snap.val();
                 profile.id = profileId;
 
+                this.current = profile;
                 this.currentSubject.onNext(profile);
             });
         }

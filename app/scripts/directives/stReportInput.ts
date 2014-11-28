@@ -1,19 +1,23 @@
 'use strict';
 
-angular.module('storiaApp').directive('stReportInput', ['ReportsStorage',
-    (reportsStorage: StoriaApp.ReportsStorage) =>
+angular.module('storiaApp').directive('stReportInput', ['ReportsStorage', 'ProfileProvider',
+    (reportsStorage: StoriaApp.ReportsStorage, profileProvider: StoriaApp.ProfileProvider) =>
     {
         return {
             restrict: 'A',
             templateUrl: '/partials/stReportInput.html',
             scope: {
-                eventId: '=',
-                author: '='
+                eventId: '='
             },
             controller: ($scope) =>
             {
                 $scope.text = '';
                 $scope.expanded = false;
+
+                profileProvider.currentProfileObservable().withScope($scope).subscribe(currentProfile =>
+                {
+                   $scope.author = currentProfile;
+                });
 
                 $scope.expandReportInput = () =>
                 {

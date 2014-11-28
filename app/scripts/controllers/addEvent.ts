@@ -2,6 +2,32 @@
 
 'use strict';
 
+
+module StoriaApp
+{
+    export class AddEventDialogController
+    {
+        private title: string;
+
+        public static $inject = ['$scope', '$location', 'EventsStorage'];
+        constructor($scope, private $location, private eventsStorage: StoriaApp.EventsStorage)
+        {
+            this.title = '';
+            $scope.vm = this;
+        }
+
+        tryAddEvent(title: string)
+        {
+            this.eventsStorage.addEventPromiseId(title).then(id =>
+            {
+                this.$location.path('/events/' + id);
+            });
+
+            return true;
+        }
+    }
+}
+
 /**
  * @ngdoc function
  * @name storiaApp.controller:AddEventCtrl
@@ -9,17 +35,4 @@
  * # AddEventCtrl
  * Controller of the storiaApp
  */
-angular.module('storiaApp').controller('AddEventCtrl', ['$scope', 'EventsStorage', '$location',
-    ($scope, eventsStorage: StoriaApp.EventsStorage, $location)=>
-    {
-        $scope.title = '';
-        $scope.tryAddEvent = (title) =>
-        {
-            eventsStorage.addEventPromiseId(title).then((id) =>
-            {
-                $location.path('/events/' + id);
-            });
-
-            return true;
-        };
-    }]);
+angular.module('storiaApp').controller('AddEventCtrl', StoriaApp.AddEventDialogController);

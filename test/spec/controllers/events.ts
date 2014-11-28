@@ -10,7 +10,6 @@ describe('Controller: EventsCtrl', () =>
 
     var EventsCtrl, scope;
     var event = 1;
-    var currentProfile = 2;
 
     beforeEach(inject(($controller, $rootScope) =>
     {
@@ -19,18 +18,12 @@ describe('Controller: EventsCtrl', () =>
         EventsCtrl = new StoriaApp.EventsController(
                 scope,
                 {id: event},
-                <StoriaApp.IEventsProvider>{getEventPromise: () => { return <ng.IPromise<any>>{then: (callback) => callback(event)};}},
-                <StoriaApp.ProfileProvider>{currentObservable: () => { return {$subscribe: ($scope, callback) =>  callback(currentProfile)};}}
+                <StoriaApp.IEventsProvider>{getEventPromise: () => { return <ng.IPromise<any>>{then: (callback) => callback(event)};}}
             );
     }));
 
     it('should attach an event to the scope', () =>
     {
         expect(scope.vm.event).toBe(event);
-    });
-
-    it('should attach a profile to the scope', () =>
-    {
-        expect(scope.vm.currentProfile).toBe(currentProfile);
     });
 });

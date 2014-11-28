@@ -9,14 +9,13 @@ module StoriaApp
         private event;
         private currentProfile;
 
-        public static $inject = ['$scope', '$routeParams', 'EventsProvider', 'ProfileProvider'];
-        constructor($scope, $routeParams, private eventsProvider: StoriaApp.IEventsProvider, private profileProvider: StoriaApp.ProfileProvider)
+        public static $inject = ['$scope', '$routeParams', 'EventsProvider'];
+        constructor($scope: ng.IScope, $routeParams: any, eventsProvider: StoriaApp.IEventsProvider)
         {
-            $scope.vm = this;
-            var id = $routeParams.id;
+            $scope['vm'] = this;
+            var id: string = $routeParams.id;
 
             eventsProvider.getEventPromise(id).then((event) => this.event = event);
-            profileProvider.currentObservable().$subscribe($scope, p => this.currentProfile = p);
         }
     }
 }

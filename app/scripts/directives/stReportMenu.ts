@@ -16,30 +16,28 @@ angular.module('storiaApp').directive('stReportMenu', ['ReportsStorage', 'Profil
                     return;
                 }
 
-                $scope.upvoted = false;
-                var profileId;
+                $scope.upvoted = true;
 
-                reportsProvider.upvotedObservable($scope.report.id).$bindTo($scope, 'upvoted');
+                reportsProvider.upvotedObservable($scope.report.id).withScope($scope).subscribe(upvoted =>
+                {
+                    $scope.upvoted = upvoted;
+                });
 
-                reportsProvider.votesObservable($scope.report.id).$subscribe($scope, (count) =>
+                reportsProvider.votesObservable($scope.report.id).withScope($scope).subscribe((count) =>
                 {
                     $scope.report.votes = count;
                 });
 
-                profileProvider.currentObservable().$subscribe($scope, (profile) =>
-                {
-                    profileId = (profile || {}).id;
-                });
-
-
                 $scope.upvote = (reportId) =>
                 {
-                    if (profileId)
+                    var profile = profileProvider.currentProfile();
+                    if (profile)
                     {
-                        reportsStorage.upvote(reportId, profileId);
+                        reportsStorage.upvote(reportId, profile.id);
                     }
                     else
                     {
+                        //TODO: show registration dialog
                     }
                 };
             }

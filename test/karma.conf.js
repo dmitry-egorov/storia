@@ -28,7 +28,7 @@ module.exports = function(config) {
       'bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js',
       'bower_components/angularfire/dist/angularfire.min.js',
       'bower_components/rxjs/dist/rx.all.js',
-      'bower_components/ng-wig/dist/ng-wig.js',
+      'bower_components/ngWig/dist/ng-wig.js',
       '.tmp/scripts/app/scripts/utils/*.js',
       '.tmp/scripts/app/scripts/angularfire/*.js',
       '.tmp/scripts/app/scripts/firebase/*.js',

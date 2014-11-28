@@ -216,7 +216,24 @@ body
     margin-bottom: 10px;
 }
 
-.dialog, .input-area
+.dialog
+{
+    @include clearfix;
+
+    textarea
+    {
+        width: 100%;
+    }
+
+    button
+    {
+        @include st-button;
+
+        margin-top: 10px;
+    }
+}
+
+.input-area
 {
     @include clearfix;
 

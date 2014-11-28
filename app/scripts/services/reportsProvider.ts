@@ -10,11 +10,11 @@ module StoriaApp
         {
         }
 
-        votesObservable(reportId: string)
+        votesObservable(reportId: string): Rx.Observable<number>
         {
             Assert.defined(reportId);
 
-            return Rx.Observable.create((observer) =>
+            return Rx.Observable.create<number>((observer) =>
             {
                 var votedByRef = this.fb
                         .child('reports')
@@ -43,7 +43,7 @@ module StoriaApp
             {
                 var upvotedRef;
 
-                var currentSubs = this.profileProvider.currentObservable().subscribe((profile) =>
+                var currentSubs = this.profileProvider.currentProfileObservable().subscribe((profile) =>
                 {
                     if (upvotedRef)
                     {
