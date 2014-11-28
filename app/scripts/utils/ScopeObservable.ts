@@ -14,11 +14,17 @@ module Rx
                 throw 'Not supported';
             }
 
-            return this.observable.subscribe(
+            var subscription = this.observable.subscribe(
                     value => this.$scope.$evalAsync(() => onNext(value)),
                     value => this.$scope.$evalAsync(() => onError(value)),
                 () => this.$scope.$evalAsync(() => onCompleted())
             );
+
+            this.$scope.$on('$destroy', () => {
+               subscription.dispose();
+            });
+
+            return subscription;
         }
     }
 

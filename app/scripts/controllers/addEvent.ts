@@ -16,9 +16,9 @@ module StoriaApp
             $scope.vm = this;
         }
 
-        tryAddEvent(title: string)
+        tryAddEvent()
         {
-            this.eventsStorage.addEventPromiseId(title).then(id =>
+            this.eventsStorage.addEventPromiseId(this.title).then(id =>
             {
                 this.$location.path('/events/' + id);
             });
@@ -28,11 +28,4 @@ module StoriaApp
     }
 }
 
-/**
- * @ngdoc function
- * @name storiaApp.controller:AddEventCtrl
- * @description
- * # AddEventCtrl
- * Controller of the storiaApp
- */
 angular.module('storiaApp').controller('AddEventCtrl', StoriaApp.AddEventDialogController);

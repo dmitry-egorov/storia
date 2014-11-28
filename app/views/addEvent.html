@@ -1,5 +1,5 @@
 <div class="dialog">
     <h4>Add Event</h4>
-    <textarea name="Text1" cols="40" rows="3" ng-model="title" placeholder="What is the title of the event?"></textarea>
-    <button ng-click="tryAddEvent(title) && closeThisDialog()">Add</button>
+    <textarea name="Text1" cols="40" rows="3" ng-model="vm.title" placeholder="What is the title of the event?"></textarea>
+    <button ng-click="vm.tryAddEvent() && closeThisDialog()">Add</button>
 </div>

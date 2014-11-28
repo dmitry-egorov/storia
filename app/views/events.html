@@ -3,9 +3,9 @@
         <h2>{{vm.event.title}}</h2>
     </header>
 
-    <div st-report-input event-id="vm.event.id"></div>
+    <div st-report-input event="vm.event"></div>
 
-    <div class="reports-count" st-reports-count count="vm.event.reportsCount"></div>
+    <div st-reports-count count="vm.event.reports.length" class="reports-count"></div>
 
     <article ng-repeat="report in vm.event.reports | orderBy: 'votes' : true">
         <div st-report report="report"></div>

@@ -19,48 +19,54 @@ module StoriaApp
         public getHomePromise(): ng.IPromise<any>
         {
             return this.fbutils.viewPromise(
-                    {
-                        _listRef: this.fb.child('events').orderByChild('addedOn').limitToLast(this.currentLimit),
+                {
+                    _listRef: this.fb.child('events').orderByChild('addedOn').limitToLast(this.currentLimit),
+                    id: StoriaApp.EventsProvider.getId,
+                    title: true,
+                    addedOn: true,
+                    reportsCount: StoriaApp.EventsProvider.getReportsCount,
+                    preview: {
+                        _key: 'previewId',
+                        _ref: this.fb.child('reports'),
                         id: StoriaApp.EventsProvider.getId,
-                        title: true,
-                        addedOn: true,
-                        reportsCount: StoriaApp.EventsProvider.getReportsCount,
-                        preview: {
-                            _key: 'previewId',
-                            _ref: this.fb.child('reports'),
-                            id: StoriaApp.EventsProvider.getId,
-                            content: true,
-                            author: this.authorSpec(),
-                            votes: StoriaApp.EventsProvider.getVotes
-                        }
-                    }, null)
-                    .then((events) => events.sortBy('addedOn', true))
-                    .then((events) =>
-                    {
-                        this.currentLimit = events.length + this.eventsPerFetch;
+                        content: true,
+                        author: this.authorSpec(),
+                        votes: StoriaApp.EventsProvider.getVotes
+                    }
+                }, null)
+                .then((events) => events.sortBy('addedOn', true))
+                .then((events) =>
+                {
+                    this.currentLimit = events.length + this.eventsPerFetch;
 
-                        return events;
-                    });
+                    return events;
+                });
         }
 
-        public getEventPromise(id: string): ng.IPromise<any>
+        public getEventPromise(id: string): ng.IPromise<Event>
         {
             Assert.defined(id);
 
             return this.fbutils.cached('event/' + id).viewPromise(
-                    {
-                        _ref: this.fb.child('events'),
+                {
+                    _ref: this.fb.child('events'),
+                    id: StoriaApp.EventsProvider.getId,
+                    title: true,
+                    reportsCount: StoriaApp.EventsProvider.getReportsCount,
+                    reports: {
+                        _listRef: this.fb.child('reports'),
                         id: StoriaApp.EventsProvider.getId,
-                        title: true,
-                        reportsCount: StoriaApp.EventsProvider.getReportsCount,
-                        reports: {
-                            _listRef: this.fb.child('reports'),
-                            id: StoriaApp.EventsProvider.getId,
-                            content: true,
-                            author: this.authorSpec(),
-                            votes: StoriaApp.EventsProvider.getVotes
-                        }
-                    }, id);
+                        content: true,
+                        author: this.authorSpec(),
+                        votes: StoriaApp.EventsProvider.getVotes
+                    }
+                }, id)
+                .then(data =>
+                {
+                    var reports = (data.reports || []).map(data =>new Report(data.id, data.content, data.author, data.votes));
+
+                    return new Event(data.id, data.title, reports)
+                });
         }
 
         private authorSpec()

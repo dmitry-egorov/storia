@@ -1,8 +1,10 @@
-<div class="input-area" ng-show="author">
-    <textarea ng-hide="expanded" name="ReportText" cols="40" rows="2" placeholder="Write your report" ng-click="expandReportInput()"></textarea>
-    <div class="active-input-area" ng-show="expanded">
-        <div st-author-info profile="author"></div>
-        <textarea rows="3" ng-wig="text" ng-focus="focused"></textarea>
-        <button class="write-report" ng-click="tryAddReport(eventId, text)">Write Report</button>
+<div class="input-area" ng-hide="vm.reported">
+    <textarea ng-hide="vm.expanded" name="ReportText" cols="40" rows="2" placeholder="Write your report" ng-click="vm.expandReportInput()"></textarea>
+    <div class="active-input-area" ng-show="vm.expanded">
+        <div st-author-info profile="vm.author"></div>
+        <textarea rows="3" ng-wig="vm.text"></textarea>
+        <button class="write-report" ng-click="vm.tryAddReport()">Write Report</button>
     </div>
 </div>
+<div class="input-area" ng-show="vm.reported">You have already reported on this event.</div>
+
