@@ -8,11 +8,11 @@
         <div class="input-area-menu">
             <button class="write-report" ng-show="vm.mode == 'add'" ng-click="vm.addReport()">Write Report</button>
             <button class="edit-report" ng-show="vm.mode == 'edit'" ng-click="vm.editReport()">Edit Report</button>
-            <a ng-click="vm.cancel()" class="cancel-link">Cancel</a>
+            <a ng-click="vm.cancel()" href="" class="cancel-link">Cancel</a>
         </div>
     </div>
 </div>
-<div class="input-area" ng-show="vm.reported && !vm.expanded">You have already reported on this event. <a
-    ng-click="vm.expandReportInput('edit')">Edit</a>.
+<div class="input-area" ng-show="vm.reported && !vm.expanded">
+    You have already reported on this event. <a ng-click="vm.expandReportInput('edit')" href="">Edit</a>.
 </div>
 
