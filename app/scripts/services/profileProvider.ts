@@ -22,7 +22,7 @@ module StoriaApp
             return this.current;
         }
 
-        currentProfileObservable(): Rx.Observable<any>
+        watchCurrentProfile(): Rx.Observable<any>
         {
             return this.currentSubject;
         }

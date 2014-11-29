@@ -6,15 +6,26 @@ module StoriaApp
 {
     export class EventsController
     {
-        private event;
+        event: Event;
+
+        private eventId: string;
 
         public static $inject = ['$scope', '$routeParams', 'EventsProvider'];
-        constructor($scope: ng.IScope, $routeParams: any, eventsProvider: StoriaApp.IEventsProvider)
+        constructor($scope: ng.IScope, $routeParams: any, private eventsProvider: StoriaApp.IEventsProvider)
         {
-            $scope['vm'] = this;
-            var id: string = $routeParams.id;
+            this.eventId = $routeParams.id;
 
-            eventsProvider.getEventPromise(id).then((event) => this.event = event);
+            this.loadEvents();
+
+            $scope['vm'] = this;
+        }
+
+        public loadEvents()
+        {
+            this.eventsProvider.getEventPromise(this.eventId).then((event) =>
+            {
+                this.event = event;
+            });
         }
     }
 }

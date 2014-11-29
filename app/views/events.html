@@ -3,7 +3,7 @@
         <h2>{{vm.event.title}}</h2>
     </header>
 
-    <div st-report-input event="vm.event"></div>
+    <div st-report-input event-id="vm.event.id" publish="vm.loadEvents()"></div>
 
     <div st-reports-count count="vm.event.reports.length" class="reports-count"></div>
 

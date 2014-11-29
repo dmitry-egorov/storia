@@ -236,7 +236,9 @@ body
     {
         width: 100%;
     }
-
+}
+.main-input-area
+{
     .ng-wig
     {
         background-color: #ffffff;
@@ -247,12 +249,12 @@ body
         line-height: 24px;
         margin-top: 10px;
 
-        button.write-report, button.edit-report
+        button.publish
         {
             @include st-button;
         }
 
-        .cancel-link
+        a.cancel
         {
             color: gray;
         }

@@ -4,125 +4,150 @@ module StoriaApp
 {
     export class ReportInput
     {
-        text: string;
-        expanded: boolean;
-        author;
         reported: boolean;
-        mode: string;
+        expanded: boolean;
 
-        private event: Event;
-
-        constructor(private $scope: ng.IScope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider)
+        constructor
+        (private eventId: string,
+         private $scope: ng.IScope,
+         private profileProvider: StoriaApp.ProfileProvider,
+         private reportsProvider: StoriaApp.ReportsProvider)
         {
             this.reported = false;
-            this.text = '';
-            this.expanded = false;
 
-            profileProvider.currentProfileObservable().withScope($scope).subscribe(currentProfile =>
-            {
-                this.author = currentProfile;
-                this.updateReported();
-            });
-
-            $scope.$watch('event', event => {
-                this.event = event;
-                this.updateReported();
-            });
-
-            $scope['vm'] = this;
+            this.subscribe();
         }
 
-        expandReportInput(mode: string)
+        expand()
         {
-            if(mode == 'add')
+            if (!this.profileProvider.currentProfile())
             {
-                this.text = '';
-            }
-            else if(mode == 'edit')
-            {
-                var report = this.getOwnReport();
-                this.text = report.content;
-            }
-            else
-            {
-                throw 'Invalid operation: no own report';
+                //TODO: show registration
+                return;
             }
 
-            this.mode = mode;
             this.expanded = true;
         }
 
-        addReport()
-        {
-            if (!this.text)
-            {
-                return;
-            }
-
-            var authorId = this.author.id;
-            var eventId = this.event.id;
-
-            this.reportsStorage.addReport(eventId, authorId, this.text);
-
-            this.expanded = false;
-            this.text = '';
-        }
-
-        editReport()
-        {
-            if (!this.text)
-            {
-                return;
-            }
-
-            var reportId = this.getOwnReport().id;
-
-            this.reportsStorage.editReport(reportId, this.text);
-
-            this.expanded = false;
-            this.text = '';
-        }
-
-        cancel()
+        collapse()
         {
             this.expanded = false;
         }
 
-        private updateReported()
+        private subscribe()
         {
-            this.reported = this.getOwnReport() !== null;
+            this.reportsProvider.watchReported(this.eventId).withScope(this.$scope).subscribe(reported =>
+            {
+                this.reported = reported;
+            });
+
+            this.profileProvider.watchCurrentProfile().withScope(this.$scope).subscribe(currentProfile =>
+            {
+                if (!currentProfile)
+                {
+                    this.expanded = false;
+                }
+            });
+        }
+    }
+
+    export class ReportEditor
+    {
+        author;
+        text: string;
+
+        private draftThrottlingPeriod = 1000;
+
+        constructor
+        (private eventId: string,
+         private publishCallback: () => void,
+         private $scope: ng.IScope,
+         private observeOnScope: ng.ObserveOnScope,
+         private profileProvider: StoriaApp.ProfileProvider,
+         private draftProvider: StoriaApp.DraftProvider,
+         private draftStorage: StoriaApp.DraftStorage,
+         private reportsStorage: StoriaApp.ReportsStorage)
+        {
+            var subscription: Rx.IDisposable;
+
+            profileProvider.watchCurrentProfile().withScope($scope).subscribe(profile =>
+            {
+                if (subscription)
+                {
+                    subscription.dispose();
+                }
+
+                this.author = profile;
+
+                if (!profile)
+                {
+                    return;
+                }
+
+                this.draftProvider.getDraftContent(this.eventId).then(draftContent =>
+                {
+                    this.text = draftContent;
+
+                    subscription = this.subscribeToEdits();
+                });
+            });
         }
 
-        private getOwnReport(): Report
+        publish()
         {
-            if(!this.author)
+            this.reportsStorage.publish(this.eventId, this.text).then(() =>
             {
-                return null;
-            }
+                this.publishCallback();
+            });
+        }
 
-            if(!this.event)
-            {
-                return null;
-            }
-
-            return this.event.getReportOf(this.author.id);
+        private subscribeToEdits(): Rx.IDisposable
+        {
+            return this.observeOnScope(this.$scope, 'editor.text')
+                .throttle(this.draftThrottlingPeriod)
+                .map(change => change.newValue)
+                .subscribe(newText =>
+                {
+                    this.draftStorage.updateDraft(this.eventId, newText);
+                });
         }
     }
 }
 
+angular
+    .module('storiaApp')
+    .directive('stReportInput', ['observeOnScope', 'ReportsStorage', 'ProfileProvider', 'DraftStorage', 'DraftProvider', 'ReportsProvider',
+        (observeOnScope,
+         reportsStorage: StoriaApp.ReportsStorage,
+         profileProvider: StoriaApp.ProfileProvider,
+         draftStorage: StoriaApp.DraftStorage,
+         draftProvider: StoriaApp.DraftProvider,
+         reportsProvider: StoriaApp.ReportsProvider) =>
+        {
+            return {
+                restrict: 'A',
+                templateUrl: '/partials/stReportInput.html',
+                scope: {
+                    eventId: '=',
+                    publish: '&'
+                },
+                controller: ($scope) =>
+                {
+                    var subscription = $scope.$watch('eventId', (eventId: string) =>
+                    {
+                        if (!eventId)
+                        {
+                            return;
+                        }
 
-angular.module('storiaApp').directive('stReportInput', ['ReportsStorage', 'ProfileProvider',
-    (reportsStorage: StoriaApp.ReportsStorage, profileProvider: StoriaApp.ProfileProvider) =>
-    {
-        return {
-            restrict: 'A',
-            templateUrl: '/partials/stReportInput.html',
-            scope: {
-                event: '='
-            },
-            controller: ($scope) =>
-            {
-                new StoriaApp.ReportInput($scope, reportsStorage, profileProvider);
-            }
-        };
-    }]);
+                        var publish = $scope['publish'];
+
+                        $scope['editor'] = new StoriaApp.ReportEditor(eventId, publish, $scope, observeOnScope, profileProvider, draftProvider, draftStorage, reportsStorage)
+                        $scope['vm'] = new StoriaApp.ReportInput(eventId, $scope, profileProvider, reportsProvider);
+
+                        subscription();
+                    });
+
+                }
+            };
+        }]);

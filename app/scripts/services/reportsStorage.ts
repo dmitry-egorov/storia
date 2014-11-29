@@ -3,14 +3,55 @@ module StoriaApp
 {
     export class ReportsStorage
     {
-        public static $inject = ['fbref'];
+        public static $inject = ['fbref', '$q', 'ProfileProvider'];
 
-        constructor(private fb: Firebase)
+        constructor(private fb: Firebase, private $q: ng.IQService, private profilePrvider: StoriaApp.ProfileProvider) {}
+
+        publish(eventId: string, content: string): ng.IPromise<void>
         {
+            Assert.defined(eventId);
+            Assert.defined(content);
+
+            var authorId = this.profilePrvider.currentProfile().id;
+            Assert.defined(authorId);
+
+            return this.getReportIdOf(eventId, authorId).then(reportId =>
+            {
+                if (reportId)
+                {
+                    return this.editReport(reportId, content);
+                }
+
+                return this.addReport(eventId, authorId, content);
+            });
         }
 
-        addReport(eventId: string, authorId: string, content: string)
+        upvote(reportId: string)
         {
+            Assert.defined(reportId);
+
+            var authorId = this.profilePrvider.currentProfile().id;
+            Assert.defined(authorId);
+
+            var upvotedRef = this.fb.child('reports').child(reportId).child('upvotedBy').child(authorId);
+
+            upvotedRef.once('value', (snap) =>
+            {
+                if (snap.val())
+                {
+                    upvotedRef.remove();
+                }
+                else
+                {
+                    upvotedRef.set(true);
+                }
+            });
+        }
+
+        private addReport(eventId: string, authorId: string, content: string): ng.IPromise<void>
+        {
+            var deferred = this.$q.defer<void>();
+
             var eventRef = this.fb
                 .child('events')
                 .child(eventId);
@@ -29,30 +70,19 @@ module StoriaApp
             eventRef.child('reports').child(key).set(true);
 
             eventRef.child('previewId').set(key);
-        }
 
-        upvote(reportId: string, userId: string)
-        {
-            Assert.defined(reportId);
-            Assert.defined(userId);
-
-            var upvotedRef = this.fb.child('reports').child(reportId).child('upvotedBy').child(userId);
-
-            upvotedRef.once('value', (snap) =>
+            this.fb.child('profileReports').child(authorId).child(eventId).set(key, () =>
             {
-                if (snap.val())
-                {
-                    upvotedRef.remove();
-                }
-                else
-                {
-                    upvotedRef.set(true);
-                }
+                deferred.resolve();
             });
+
+            return deferred.promise;
         }
 
-        editReport(reportId: string, text: string): void
+        private editReport(reportId, content): ng.IPromise<void>
         {
+            var deferred = this.$q.defer<void>();
+
             var reportRef = this.fb.child('reports').child(reportId);
 
             var contentRef = reportRef.child('content');
@@ -61,9 +91,24 @@ module StoriaApp
             {
                 reportRef.child('history').push(snap.val());
 
-                contentRef.set(text);
+                contentRef.set(content, () =>
+                {
+                    deferred.resolve();
+                });
             });
 
+            return deferred.promise;
+        }
+
+        private getReportIdOf(eventId: string, authorId: string): ng.IPromise<string>
+        {
+            var deferred = this.$q.defer();
+            this.fb.child('profileReports').child(authorId).child(eventId).once('value', snap =>
+            {
+                deferred.resolve(snap.val());
+            });
+
+            return deferred.promise;
         }
     }
 }

@@ -8,7 +8,7 @@ angular.module('storiaApp').directive('stHeader', ['ngDialog', 'ProfileProvider'
             templateUrl: '/partials/stHeader.html',
             controller: ($scope) =>
             {
-                profileProvider.currentProfileObservable().withScope($scope).subscribe((profile) =>
+                profileProvider.watchCurrentProfile().withScope($scope).subscribe((profile) =>
                 {
                     $scope.name = (profile || {}).name;
                 });

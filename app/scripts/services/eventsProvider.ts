@@ -47,7 +47,7 @@ module StoriaApp
         {
             Assert.defined(id);
 
-            return this.fbutils.cached('event/' + id).viewPromise(
+            return this.fbutils/*.cached('event/' + id)*/.viewPromise(
                 {
                     _ref: this.fb.child('events'),
                     id: StoriaApp.EventsProvider.getId,
@@ -63,7 +63,7 @@ module StoriaApp
                 }, id)
                 .then(data =>
                 {
-                    var reports = (data.reports || []).map(data =>new Report(data.id, data.content, data.author, data.votes));
+                    var reports = (data.reports || []).map(data => ReportFactory.create(data));
 
                     return new Event(data.id, data.title, reports)
                 });

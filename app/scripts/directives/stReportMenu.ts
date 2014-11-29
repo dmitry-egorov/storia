@@ -4,12 +4,16 @@ module StoriaApp
 {
     export class ReportMenu
     {
-        public canUpvote: boolean;
+        public upvoted: boolean;
         public report: Report;
+        public disabled: boolean;
 
         constructor($scope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider)
         {
-            $scope.$watch('report', report =>
+            this.disabled = true;
+            this.upvoted = false;
+
+            var subscription = $scope.$watch('report', report =>
             {
                 this.report = report;
 
@@ -18,15 +22,17 @@ module StoriaApp
                     return;
                 }
 
-                reportsProvider.upvotedObservable(report.id).withScope($scope).subscribe(upvoted =>
+                reportsProvider.watchUpvote(report.id).withScope($scope).subscribe(status =>
                 {
-                    this.canUpvote = !upvoted;
+                    this.setFlagsForStatus(status);
                 });
 
-                reportsProvider.votesObservable(report.id).withScope($scope).subscribe((count) =>
+                reportsProvider.watchVotesCount(report.id).withScope($scope).subscribe((count) =>
                 {
                     this.report.votes = count;
                 });
+
+                subscription();
             });
 
             $scope['vm'] = this;
@@ -37,11 +43,38 @@ module StoriaApp
             var profile = this.profileProvider.currentProfile();
             if (profile)
             {
-                this.reportsStorage.upvote(reportId, profile.id);
+                this.reportsStorage.upvote(reportId);
             }
             else
             {
                 //TODO: show registration dialog
+            }
+        }
+
+        private setFlagsForStatus(status)
+        {
+            switch (status)
+            {
+                case UpvoteStatus.NonUpvoted:
+                {
+                    this.disabled = false;
+                    this.upvoted = false;
+                    break;
+                }
+                case UpvoteStatus.Upvoted:
+                {
+                    this.disabled = false;
+                    this.upvoted = true;
+                    break;
+                }
+                case UpvoteStatus.Owner:
+                {
+                    this.disabled = true;
+                    this.upvoted = false;
+                    break;
+                }
+                default:
+                    throw 'Unknown upvote status';
             }
         }
     }

@@ -20,6 +20,7 @@ angular
         'ngRoute',
         'ngSanitize',
         'ngWig',
+        'rx',
         'infinite-scroll'
     ])
     .service('Authenticator', StoriaApp.Authenticator)
@@ -29,9 +30,12 @@ angular
     .service('ReportsProvider', StoriaApp.ReportsProvider)
     .service('ReportsStorage', StoriaApp.ReportsStorage)
     .service('UserStorage', StoriaApp.UserStorage)
+    .service('DraftProvider', StoriaApp.DraftProvider)
+    .service('DraftStorage', StoriaApp.DraftStorage)
     .service('ViewGenerator', FirebaseUtils.ViewGenerator)
     .controller('MainCtrl', StoriaApp.MainController)
     .controller('EventsCtrl', StoriaApp.EventsController)
+    .controller('AddEventCtrl', StoriaApp.AddEventDialogController)
     .config(function ($routeProvider: ng.route.IRouteProvider)
     {
         $routeProvider

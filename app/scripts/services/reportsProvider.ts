@@ -10,16 +10,16 @@ module StoriaApp
         {
         }
 
-        votesObservable(reportId: string): Rx.Observable<number>
+        watchVotesCount(reportId: string): Rx.Observable<number>
         {
             Assert.defined(reportId);
 
             return Rx.Observable.create<number>((observer) =>
             {
                 var votedByRef = this.fb
-                        .child('reports')
-                        .child(reportId)
-                        .child('upvotedBy');
+                    .child('reports')
+                    .child(reportId)
+                    .child('upvotedBy');
 
                 votedByRef.on('value', (snap) =>
                 {
@@ -35,36 +35,51 @@ module StoriaApp
             });
         }
 
-        upvotedObservable(reportId)
+        watchUpvote(reportId): Rx.Observable<UpvoteStatus>
         {
             Assert.defined(reportId);
 
-            return Rx.Observable.create((observer) =>
+            return Rx.Observable.create<UpvoteStatus>((observer) =>
             {
-                var upvotedRef;
+                var upvotedRef: Firebase;
 
-                var currentSubs = this.profileProvider.currentProfileObservable().subscribe((profile) =>
+                var currentSubs = this.profileProvider.watchCurrentProfile().map(x => x ? x.id : null).subscribe(profileId =>
                 {
                     if (upvotedRef)
                     {
                         upvotedRef.off();
                     }
 
-                    if (!profile)
+                    if (!profileId)
                     {
-                        observer.onNext(false);
+                        observer.onNext(UpvoteStatus.NonUpvoted);
                         return;
                     }
 
-                    upvotedRef = this.fb
-                            .child('reports')
-                            .child(reportId)
-                            .child('upvotedBy')
-                            .child(profile.id);
+                    var reportRef = this.fb
+                        .child('reports')
+                        .child(reportId);
 
-                    upvotedRef.on('value', (snap) =>
+                    reportRef.once('value', snap =>
                     {
-                        observer.onNext(!!snap.val());
+                        var report = snap.val();
+                        Assert.defined(report);
+
+                        if(report.authorId === profileId)
+                        {
+                            observer.onNext(UpvoteStatus.Owner);
+                        }
+                        else
+                        {
+                            upvotedRef = reportRef
+                                .child('upvotedBy')
+                                .child(profileId);
+
+                            upvotedRef.on('value', snap =>
+                            {
+                                observer.onNext((!!snap.val()) ? UpvoteStatus.Upvoted : UpvoteStatus.NonUpvoted);
+                            });
+                        }
                     });
                 });
 
@@ -78,5 +93,52 @@ module StoriaApp
                 };
             });
         }
+
+        watchReported(eventId: string): Rx.Observable<boolean>
+        {
+            Assert.defined(eventId);
+
+            return Rx.Observable.create<boolean>(observer =>
+            {
+                var reportRef: Firebase;
+
+                var currentSubs = this.profileProvider.watchCurrentProfile().map(x => x ? x.id : null).subscribe(profileId =>
+                {
+                    if(reportRef)
+                    {
+                        reportRef.off();
+                    }
+
+                    if(!profileId)
+                    {
+                        observer.onNext(false);
+                        return;
+                    }
+
+                    var reportRef = this.fb
+                        .child('profileReports')
+                        .child(profileId)
+                        .child(eventId);
+
+                    reportRef.on('value', snap =>
+                    {
+                        observer.onNext(!!snap.val());
+                    });
+                });
+
+                return function ()
+                {
+                    currentSubs.dispose();
+                    reportRef.off();
+                };
+            });
+        }
+    }
+
+    export enum UpvoteStatus
+    {
+        Owner = 0,
+        NonUpvoted = 1,
+        Upvoted = 2
     }
 }

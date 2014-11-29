@@ -27,5 +27,3 @@ module StoriaApp
         }
     }
 }
-
-angular.module('storiaApp').controller('AddEventCtrl', StoriaApp.AddEventDialogController);
