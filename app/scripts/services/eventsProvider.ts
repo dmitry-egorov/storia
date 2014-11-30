@@ -6,18 +6,24 @@ module StoriaApp
 {
     export class EventsProvider implements IHomeProvider, IEventsProvider
     {
-        private eventsPerFetch = 4;
+        private eventsPerFetch = 10;
         private currentLimit: number;
+        private allEvents: Array<any>;
 
-        public static $inject = ['fbref', 'ViewGenerator'];
+        public static $inject = ['fbref', 'ViewGenerator','$q'];
 
-        constructor(private fb: Firebase, private fbutils: FirebaseUtils.ViewGenerator)
+        constructor(private fb: Firebase, private fbutils: FirebaseUtils.ViewGenerator, private $q: ng.IQService)
         {
             this.currentLimit = this.eventsPerFetch;
         }
 
-        public getHomePromise(): ng.IPromise<any>
+        public getHomePromise(): ng.IPromise<Array<any>>
         {
+            if(this.allEvents)
+            {
+                return this.$q.when(this.allEvents);
+            }
+
             return this.fbutils.viewPromise(
                 {
                     _listRef: this.fb.child('events').orderByChild('addedOn').limitToLast(this.currentLimit),
@@ -37,7 +43,14 @@ module StoriaApp
                 .then((events) => events.sortBy('addedOn', true))
                 .then((events) =>
                 {
-                    this.currentLimit = events.length + this.eventsPerFetch;
+                    if (this.currentLimit > events.length)
+                    {
+                        this.allEvents = events;
+                    }
+                    else
+                    {
+                        this.currentLimit += this.eventsPerFetch;
+                    }
 
                     return events;
                 });
