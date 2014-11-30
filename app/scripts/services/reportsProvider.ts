@@ -65,7 +65,7 @@ module StoriaApp
                         var report = snap.val();
                         Assert.defined(report);
 
-                        if(report.authorId === profileId)
+                        if (report.authorId === profileId)
                         {
                             observer.onNext(UpvoteStatus.Owner);
                         }
@@ -104,12 +104,12 @@ module StoriaApp
 
                 var currentSubs = this.profileProvider.watchCurrentProfile().map(x => x ? x.id : null).subscribe(profileId =>
                 {
-                    if(reportRef)
+                    if (reportRef)
                     {
                         reportRef.off();
                     }
 
-                    if(!profileId)
+                    if (!profileId)
                     {
                         observer.onNext(false);
                         return;
@@ -129,7 +129,10 @@ module StoriaApp
                 return function ()
                 {
                     currentSubs.dispose();
-                    reportRef.off();
+                    if (reportRef)
+                    {
+                        reportRef.off();
+                    }
                 };
             });
         }

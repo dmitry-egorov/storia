@@ -9,6 +9,6 @@
 
     <article ng-repeat="report in vm.event.reports | orderBy: 'votes' : true">
         <div st-report report="report"></div>
-        <div st-report-menu report="report"></div>
+        <div st-report-menu report-id="report.id"></div>
     </article>
 </div>

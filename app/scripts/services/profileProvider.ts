@@ -14,6 +14,10 @@ module StoriaApp
         constructor(private fb: Firebase)
         {
             this.currentSubject = new Rx.BehaviorSubject(null);
+            this.currentSubject.subscribe(profile =>
+            {
+                this.current = profile;
+            });
             this.initSubject();
         }
 
@@ -86,7 +90,6 @@ module StoriaApp
                 var profile = snap.val();
                 profile.id = profileId;
 
-                this.current = profile;
                 this.currentSubject.onNext(profile);
             });
         }

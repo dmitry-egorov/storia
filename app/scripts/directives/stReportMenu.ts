@@ -4,46 +4,32 @@ module StoriaApp
 {
     export class ReportMenu
     {
-        public upvoted: boolean;
-        public report: Report;
-        public disabled: boolean;
+        upvoted: boolean;
+        disabled: boolean;
+        reportVotes: number;
 
-        constructor($scope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider)
+        constructor(private reportId: string, $scope: ng.IScope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider)
         {
             this.disabled = true;
             this.upvoted = false;
 
-            var subscription = $scope.$watch('report', report =>
+            reportsProvider.watchUpvote(reportId).withScope($scope).subscribe(status =>
             {
-                this.report = report;
-
-                if (!report)
-                {
-                    return;
-                }
-
-                reportsProvider.watchUpvote(report.id).withScope($scope).subscribe(status =>
-                {
-                    this.setFlagsForStatus(status);
-                });
-
-                reportsProvider.watchVotesCount(report.id).withScope($scope).subscribe((count) =>
-                {
-                    this.report.votes = count;
-                });
-
-                subscription();
+                this.setFlagsForStatus(status);
             });
 
-            $scope['vm'] = this;
+            reportsProvider.watchVotesCount(reportId).withScope($scope).subscribe((count) =>
+            {
+                this.reportVotes = count;
+            });
         }
 
-        upvote(reportId: string)
+        upvote()
         {
             var profile = this.profileProvider.currentProfile();
             if (profile)
             {
-                this.reportsStorage.upvote(reportId);
+                this.reportsStorage.upvote(this.reportId);
             }
             else
             {
@@ -87,11 +73,23 @@ angular.module('storiaApp').directive('stReportMenu', ['ReportsStorage', 'Profil
             restrict: 'A',
             templateUrl: '/partials/stReportMenu.html',
             scope: {
-                report: '='
+                reportId: '='
             },
             controller: ($scope) =>
             {
-                new StoriaApp.ReportMenu($scope, reportsStorage, profileProvider, reportsProvider);
+                var subscription = $scope.$watch('reportId', reportId =>
+                {
+                    if (!reportId)
+                    {
+                        return;
+                    }
+
+                    $scope['vm'] = new StoriaApp.ReportMenu(reportId, $scope, reportsStorage, profileProvider, reportsProvider);;
+
+                    subscription();
+                });
+
+
             }
         };
     }]);

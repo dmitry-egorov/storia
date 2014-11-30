@@ -1,5 +1,5 @@
 <div class="report-menu">
-    <button class="upvote-btn" ng-class="{'upvoted': vm.upvoted, 'not-upvoted': !vm.upvoted, 'disabled': vm.disabled}" ng-click="vm.upvote(vm.report.id)">
-        <span ng-bind="vm.upvoted ? 'Upvote' : 'Upvoted'"></span>&nbsp;<span class="votes-count" ng-bind="vm.report.votes"></span>
+    <button class="upvote-btn" ng-class="{'upvoted': vm.upvoted, 'not-upvoted': !vm.upvoted, 'disabled': vm.disabled}" ng-click="vm.upvote()">
+        <span ng-bind="vm.upvoted ? 'Upvoted' : 'Upvote'"></span>&nbsp;<span class="votes-count" ng-bind="vm.reportVotes"></span>
     </button>
 </div>
