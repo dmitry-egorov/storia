@@ -2,6 +2,6 @@ module StoriaApp
 {
     export interface IHomeProvider
     {
-        getHomePromise(): ng.IPromise<any>;
+        getHomePromise(): ng.IPromise<Array<any>>;
     }
 }

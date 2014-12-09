@@ -24,7 +24,9 @@ angular
         'infinite-scroll'
     ])
     .service('Authenticator', StoriaApp.Authenticator)
+    .service('HomeProvider', StoriaApp.HomeProvider)
     .service('EventsProvider', StoriaApp.EventsProvider)
+    .service('Searcher', StoriaApp.Searcher)
     .service('EventsStorage', StoriaApp.EventsStorage)
     .service('ProfileProvider', StoriaApp.ProfileProvider)
     .service('ReportsProvider', StoriaApp.ReportsProvider)
@@ -34,6 +36,7 @@ angular
     .service('DraftStorage', StoriaApp.DraftStorage)
     .service('ViewGenerator', FirebaseUtils.ViewGenerator)
     .controller('MainCtrl', StoriaApp.MainController)
+    .controller('SearchCtrl', StoriaApp.SearchController)
     .controller('EventsCtrl', StoriaApp.EventsController)
     .controller('AddEventCtrl', StoriaApp.AddEventDialogController)
     .config(function ($routeProvider: ng.route.IRouteProvider)
@@ -48,6 +51,11 @@ angular
             {
                 templateUrl: 'views/events.html',
                 controller: 'EventsCtrl'
+            })
+            .when('/search/:query',
+            {
+                templateUrl: 'views/main.html',
+                controller: 'SearchCtrl'
             })
             .otherwise({
                 redirectTo: '/'

@@ -6,10 +6,10 @@ module StoriaApp
 {
     export class MainController
     {
-        public loading: boolean = false;
+        public disableInfiniteScroll: boolean = false;
         public events: any = [];
 
-        public static $inject = ['$scope', 'EventsProvider'];
+        public static $inject = ['$scope', 'HomeProvider'];
         constructor($scope: ng.IScope, private eventsProvider: StoriaApp.IHomeProvider)
         {
             $scope['vm'] = this;
@@ -17,12 +17,12 @@ module StoriaApp
 
         moreEvents()
         {
-            this.loading = true;
+            this.disableInfiniteScroll = true;
 
             this.eventsProvider.getHomePromise().then((events) =>
             {
                 this.events = events;
-                this.loading = false;
+                this.disableInfiniteScroll = false;
             });
         }
     }

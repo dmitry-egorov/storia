@@ -2,6 +2,11 @@
 
 module FirebaseUtils
 {
+    export function getId(obj: Object, key: string): string
+    {
+        return key;
+    }
+
     export class ViewGenerator
     {
         private cache: Object;

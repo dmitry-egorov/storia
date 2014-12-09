@@ -29,7 +29,7 @@
 <div class="header">
     <div class="container">
         <h3><a ng-href="#/"><i class="fa fa-circle"></i></a></h3>
-
+        <div st-search></div>
         <div st-header></div>
     </div>
 </div>
@@ -95,18 +95,21 @@
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 
-<script src="scripts/app/scripts/utils/Encoder.js"></script>
-<script src="scripts/app/scripts/utils/arrayExtensions.js"></script>
-<script src="scripts/app/scripts/utils/ScopeObservable.js"></script>
-<script src="scripts/app/scripts/utils/Assert.js"></script>
-<script src="scripts/app/scripts/utils/ObjectEx.js"></script>
-<script src="scripts/app/scripts/firebase/firebase-utils.js"></script>
-<script src="scripts/app/scripts/angularfire/config.js"></script>
+<script src="scripts/app/scripts/tools/utils/Encoder.js"></script>
+<script src="scripts/app/scripts/tools/utils/arrayExtensions.js"></script>
+<script src="scripts/app/scripts/tools/utils/ScopeObservable.js"></script>
+<script src="scripts/app/scripts/tools/utils/Assert.js"></script>
+<script src="scripts/app/scripts/tools/utils/ObjectEx.js"></script>
+<script src="scripts/app/scripts/tools/firebase/firebase-utils.js"></script>
+<script src="scripts/app/scripts/tools/angularfire/config.js"></script>
 <script src="scripts/app/scripts/model/Event.js"></script>
 <script src="scripts/app/scripts/model/Report.js"></script>
+<script src="scripts/app/scripts/services/specs/views.js"></script>
 <script src="scripts/app/scripts/services/factories/ReportFactory.js"></script>
 <script src="scripts/app/scripts/services/authenticator.js"></script>
+<script src="scripts/app/scripts/services/homeProvider.js"></script>
 <script src="scripts/app/scripts/services/eventsProvider.js"></script>
+<script src="scripts/app/scripts/services/searcher.js"></script>
 <script src="scripts/app/scripts/services/eventsStorage.js"></script>
 <script src="scripts/app/scripts/services/profileProvider.js"></script>
 <script src="scripts/app/scripts/services/reportsProvider.js"></script>
@@ -115,6 +118,7 @@
 <script src="scripts/app/scripts/services/draftProvider.js"></script>
 <script src="scripts/app/scripts/services/draftStorage.js"></script>
 <script src="scripts/app/scripts/controllers/main.js"></script>
+<script src="scripts/app/scripts/controllers/search.js"></script>
 <script src="scripts/app/scripts/controllers/events.js"></script>
 <script src="scripts/app/scripts/controllers/addEvent.js"></script>
 <script src="scripts/app/scripts/app.js"></script>
@@ -123,6 +127,7 @@
 <script src="scripts/app/scripts/directives/stReportMenu.js"></script>
 <script src="scripts/app/scripts/directives/stReportInput.js"></script>
 <script src="scripts/app/scripts/directives/stHeader.js"></script>
+<script src="scripts/app/scripts/directives/stSearch.js"></script>
 <script src="scripts/app/scripts/directives/stReportsCount.js"></script>
 <script src="scripts/app/scripts/directives/ngDisableOnEmpty.js"></script>
 

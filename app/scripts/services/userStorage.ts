@@ -46,7 +46,6 @@ module StoriaApp
 
                     accountRef.set(accountData);
                 });
-
             });
         }
 

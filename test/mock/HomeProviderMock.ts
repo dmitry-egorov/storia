@@ -1,4 +1,4 @@
-/// <reference path="../../app/scripts/services/interfaces/IEventsProvider.ts" />
+/// <reference path="../../app/scripts/services/interfaces/IHomeProvider.ts" />
 
 class HomeProviderMock implements StoriaApp.IHomeProvider
 {

@@ -16,7 +16,7 @@ module StoriaApp
             var eventRef = this.fb.child('events').child(id);
             var deferred = this.$q.defer<string>();
 
-            eventRef.once('value', function (snapshot)
+            eventRef.once('value', snapshot =>
             {
                 if (snapshot.val())
                 {
@@ -28,7 +28,17 @@ module StoriaApp
                         title: title,
                         addedOn: Firebase.ServerValue.TIMESTAMP
                     },
-                    () => deferred.resolve(id)
+                    () =>
+                    {
+                        this.fb
+                            .child('commands')
+                            .child('addEvent')
+                            .child('queue')
+                            .push({title: title}, () =>
+                            {
+                                deferred.resolve(id)
+                            });
+                    }
                 );
             });
 
