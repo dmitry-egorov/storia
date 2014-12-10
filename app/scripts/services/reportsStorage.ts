@@ -64,17 +64,28 @@ module StoriaApp
                     eventId: eventId,
                     content: content,
                     addedOn: Firebase.ServerValue.TIMESTAMP
+                }, () =>
+                {
+                    eventRef.child('reports').child(key).set(true, () =>
+                    {
+                        eventRef.child('previewId').set(key, () =>
+                        {
+                            this.fb.child('profileReports').child(authorId).child(eventId).set(key, () =>
+                            {
+                                this.fb.child('commands').child('addReport').child('queue').push(
+                                    {
+                                        content: content,
+                                        eventId: eventId,
+                                        authorId: authorId
+                                    }, () =>
+                                    {
+                                        deferred.resolve();
+                                    });
+                            });
+                        });
+                    });
                 })
                 .key();
-
-            eventRef.child('reports').child(key).set(true);
-
-            eventRef.child('previewId').set(key);
-
-            this.fb.child('profileReports').child(authorId).child(eventId).set(key, () =>
-            {
-                deferred.resolve();
-            });
 
             return deferred.promise;
         }
