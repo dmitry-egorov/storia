@@ -26,7 +26,7 @@ module StoriaApp
 
         private subscribeForResult(searchRef, key, d)
         {
-            var resultRef = searchRef.child("results").child(key);
+            var resultRef = searchRef.child("results").child(key).child("searcher");
             var valueSubs = resultRef.on('value', snap =>
             {
                 var result = snap.val();

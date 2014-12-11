@@ -72,7 +72,7 @@ module StoriaApp
                         {
                             this.fb.child('profileReports').child(authorId).child(eventId).set(key, () =>
                             {
-                                this.fb.child('commands').child('addReport').child('queue').push(
+                                this.fb.child('commands').child('report').child('queue').push(
                                     {
                                         content: content,
                                         eventId: eventId,
