@@ -8,11 +8,11 @@ module StoriaApp
 
         constructor(private fb: Firebase, private $http: ng.IHttpService) {}
 
-        public tryCreateUser(uid: string, provider: string, providerData, displayName: string)
+        public tryCreateUser(accountId: string, provider: string, providerData, displayName: string)
         {
             var accountRef = this.fb
                     .child('accounts')
-                    .child(uid);
+                    .child(accountId);
 
             accountRef.once('value', (snapshot) =>
             {

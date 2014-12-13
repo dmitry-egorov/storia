@@ -1,4 +1,6 @@
 <div class="author-info">
-    <img ng-src="{{profile.image}}" width="32" height="32" alt="{{profile.name}}" />
+    <object data="{{profile.image}}" type="image/png"  width="32" height="32" alt="{{profile.name}}" >
+        <img src="http://pointswarm.com/img/anonymous.png"  width="32" height="32" alt="{{profile.name}}" />
+    </object>
     <div><span class="author-name">{{profile.name}}</span><span ng-show="profile.publisherName">, </span>{{profile.publisherName}}</div>
 </div>
