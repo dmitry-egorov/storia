@@ -35,6 +35,7 @@ interface IFirebaseQuery {
     on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
     off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
     once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;
+    exists($q: ng.IQService): ng.IPromise<boolean>;
     limit(limit: number): IFirebaseQuery;
     limitToLast(limit: number): IFirebaseQuery;
     startAt(priority?: string, name?: string): IFirebaseQuery;
@@ -76,6 +77,7 @@ declare class Firebase implements IFirebaseQuery {
     on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
     off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
     once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;
+    exists($q: ng.IQService): ng.IPromise<boolean>;
     limit(limit: number): IFirebaseQuery;
     limitToLast(limit: number): IFirebaseQuery;
     startAt(priority?: string, name?: string): IFirebaseQuery;

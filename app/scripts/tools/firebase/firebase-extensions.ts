@@ -64,3 +64,14 @@ Firebase.prototype.awaitQ = function<T>($q: ng.IQService): ng.IPromise<T>
 
     return d.promise;
 };
+
+Firebase.prototype.exists = function($q: ng.IQService): ng.IPromise<boolean>
+{
+    var self: Firebase = this;
+
+    var d = $q.defer<boolean>();
+
+    self.once('value', s => d.resolve(!!s.val()));
+
+    return d.promise;
+};

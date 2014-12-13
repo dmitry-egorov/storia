@@ -27,15 +27,15 @@ module StoriaApp
                         .child(minionName)
                         .child('results')
                         .child(key)
-                        .awaitQ<any>(this.$q)
+                        .awaitQ<CommandResult<T>>(this.$q)
                         .then(value =>
                         {
                             if(!value.ok)
                             {
-                                throw "Command failed"
+                                throw "Command failed";
                             }
 
-                            return value.data
+                            return value.data;
                         })
                         .then(data => new CommandResponse(key, data))
             );
@@ -45,5 +45,10 @@ module StoriaApp
     export class CommandResponse<T>
     {
         constructor(public key: string, public data: T) {}
+    }
+
+    class CommandResult<T>
+    {
+        constructor(public ok: boolean, public data: T) {}
     }
 }
