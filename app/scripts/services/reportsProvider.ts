@@ -142,6 +142,7 @@ module StoriaApp
     {
         Owner = 0,
         NonUpvoted = 1,
-        Upvoted = 2
+        Upvoted = 2,
+        Waiting = 3
     }
 }

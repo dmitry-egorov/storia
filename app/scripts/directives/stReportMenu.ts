@@ -29,6 +29,7 @@ module StoriaApp
             var profile = this.profileProvider.currentProfile();
             if (profile)
             {
+                this.setFlagsForStatus(UpvoteStatus.Waiting);
                 this.reportsStorage.upvote(this.reportId);
             }
             else
@@ -57,6 +58,12 @@ module StoriaApp
                 {
                     this.disabled = true;
                     this.upvoted = false;
+                    break;
+                }
+                case UpvoteStatus.Waiting:
+                {
+                    this.disabled = true;
+                    this.upvoted = true;
                     break;
                 }
                 default:

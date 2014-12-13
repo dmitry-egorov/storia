@@ -3,9 +3,9 @@ module StoriaApp
 {
     export class ReportsStorage
     {
-        public static $inject = ['fbref', 'ProfileProvider', 'Commander'];
+        public static $inject = ['ProfileProvider', 'Commander'];
 
-        constructor(private fb: Firebase, private profileProvider: StoriaApp.ProfileProvider, private commander: StoriaApp.Commander) {}
+        constructor(private profileProvider: StoriaApp.ProfileProvider, private commander: StoriaApp.Commander) {}
 
         publish(eventId: string, content: string): ng.IPromise<void>
         {
@@ -32,22 +32,18 @@ module StoriaApp
         {
             Assert.defined(reportId);
 
-            var authorId = this.profileProvider.currentProfile().id;
-            Assert.defined(authorId);
+            var voterId = this.profileProvider.currentProfile().id;
+            Assert.defined(voterId);
 
-            var upvotedRef = this.fb.child('reports').child(reportId).child('upvotedBy').child(authorId);
+            var command = {
+                "reportId": reportId,
+                "voterId": voterId
+            };
 
-            upvotedRef.once('value', (snap) =>
-            {
-                if (snap.val())
-                {
-                    upvotedRef.remove();
-                }
-                else
-                {
-                    upvotedRef.set(true);
-                }
-            });
+            return this
+                .commander
+                .command('upvote', command, 'voter')
+                .then(() => {});
         }
     }
 }
