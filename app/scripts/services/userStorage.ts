@@ -64,12 +64,12 @@ module StoriaApp
                         })
                         .error(function ()
                         {
-                            callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
+                            callback('http://pointswarm.com/img/anonymous.png');
                         });
             }
             else
             {
-                callback('http://qsf.is.quoracdn.net/-9dd03eeb11527463.png');
+                callback('http://pointswarm.com/img/anonymous.png');
             }
         }
     }
