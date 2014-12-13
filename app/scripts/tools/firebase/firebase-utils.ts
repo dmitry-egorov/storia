@@ -38,7 +38,7 @@ module FirebaseUtils
             };
         }
 
-        public viewPromise(spec: Object, id)
+        public viewPromise(spec: Object, id): ng.IPromise<any>
         {
             var resultDeferred = this.$q.defer();
 

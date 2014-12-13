@@ -6,60 +6,26 @@ module StoriaApp
 {
     export class Searcher
     {
-        public static $inject = ['fbref', 'ViewGenerator', '$q'];
+        public static $inject = ['fbref', 'ViewGenerator', '$q', 'Commander'];
 
-        constructor(private fb: Firebase, private fbutils: FirebaseUtils.ViewGenerator, private $q: ng.IQService) {}
+        constructor(private fb: Firebase, private fbutils: FirebaseUtils.ViewGenerator, private $q: ng.IQService, private commander: StoriaApp.Commander) {}
 
         searchPromise(query: string): ng.IPromise<Array<string>>
         {
-            var d = this.$q.defer();
-
-            var searchRef = this.fb.child("commands").child("search");
-
-            var key = searchRef.child("queue").push({query: query}, () =>
-            {
-                this.subscribeForResult(searchRef, key, d);
-            }).key();
-
-            return d.promise
+            return this
+                .commander
+                .command('search', {query: query}, 'searcher')
+                .then(cr => this.getEvent(cr.data));
         }
 
-        private subscribeForResult(searchRef, key, d)
-        {
-            var resultRef = searchRef.child("results").child(key).child("searcher");
-            var valueSubs = resultRef.on('value', snap =>
-            {
-                var result = snap.val();
-                if (!result)
-                {
-                    return;
-                }
-
-                if (result.ok)
-                {
-                    this.getEvent(result)
-                        .then(r =>
-                        {
-                            resultRef.off('value', valueSubs);
-                            d.resolve(r)
-                        });
-                }
-                else
-                {
-                    d.reject("Search failed");
-                    resultRef.off('value', valueSubs);
-                }
-            })
-        }
-
-        private getEvent(result)
+        private getEvent(data): ng.IPromise<Array<string>>
         {
             var eventIdsObject = {};
-            var data = result.data;
-            if(!data)
+            if (!data)
             {
                 return this.$q.when([]);
             }
+
             var eventIds = data.eventIds;
             for (var i = 0; i < eventIds.length; i++)
             {

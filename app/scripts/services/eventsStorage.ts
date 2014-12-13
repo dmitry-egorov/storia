@@ -4,45 +4,20 @@ module StoriaApp
 {
     export class EventsStorage
     {
-        public static $inject = ['fbref', '$q'];
+        public static $inject = ['Commander'];
 
-        constructor(private fb: Firebase, private $q: ng.IQService) {}
+        constructor(private commander: StoriaApp.Commander) {}
 
-        public addEventPromiseId(title: string): ng.IPromise<string>
+        public addEvent(title: string): ng.IPromise<string>
         {
             Assert.notEmpty(title);
 
             var id = Encoder.encodeId(title);
-            var eventRef = this.fb.child('events').child(id);
-            var deferred = this.$q.defer<string>();
 
-            eventRef.once('value', snapshot =>
-            {
-                if (snapshot.val())
-                {
-                    return;
-                }
-
-                eventRef.set(
-                    {
-                        title: title,
-                        addedOn: Firebase.ServerValue.TIMESTAMP
-                    },
-                    () =>
-                    {
-                        this.fb
-                            .child('commands')
-                            .child('addEvent')
-                            .child('queue')
-                            .push({title: title}, () =>
-                            {
-                                deferred.resolve(id)
-                            });
-                    }
-                );
-            });
-
-            return deferred.promise;
+            return this
+                .commander
+                .command('addEvent', {title: title}, 'eventViewGenerator')
+                .then(() => id);
         }
     }
 }

@@ -31,6 +31,7 @@ interface IFirebaseOnDisconnect {
 }
 
 interface IFirebaseQuery {
+    awaitQ<T>($q: ng.IQService): ng.IPromise<T>;
     on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
     off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
     once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;
@@ -57,9 +58,11 @@ declare class Firebase implements IFirebaseQuery {
     key(): string;
     toString(): string;
     set(value: any, onComplete?: (error: any) => void): void;
+    setQ($q:ng.IQService, value: any): ng.IPromise<void>;
     update(value: any, onComplete?: (error: any) => void): void;
     remove(onComplete?: (error: any) => void): void;
     push(value: any, onComplete?: (error: any) => void): Firebase;
+    pushQ($q:ng.IQService, value: any): ng.IPromise<string>;
     setWithPriority(value: any, priority: string, onComplete?: (error: any) => void): void;
     setWithPriority(value: any, priority: number, onComplete?: (error: any) => void): void;
     setPriority(priority: string, onComplete?: (error: any) => void): void;
@@ -69,6 +72,7 @@ declare class Firebase implements IFirebaseQuery {
     onAuth(callback: any);
     authWithOAuthPopup(provider: string, callback: any);
     orderByChild(propertyName: string): Firebase;
+    awaitQ<T>($q: ng.IQService): ng.IPromise<T>;
     on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
     off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
     once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;

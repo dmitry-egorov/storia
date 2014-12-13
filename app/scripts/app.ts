@@ -23,6 +23,7 @@ angular
         'rx',
         'infinite-scroll'
     ])
+    .service('Commander', StoriaApp.Commander)
     .service('Authenticator', StoriaApp.Authenticator)
     .service('HomeProvider', StoriaApp.HomeProvider)
     .service('EventsProvider', StoriaApp.EventsProvider)
