@@ -36,14 +36,14 @@ module.exports = function (grunt) {
                 tasks: ['wiredep']
             },
             ts: {
-                files: ['<%= yeoman.app %>/scripts/{,*/}*.ts'],
+                files: ['<%= yeoman.app %>/scripts/**/*.ts'],
                 tasks: ['typescript:base'],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
             },
             tsTest: {
-                files: ['test/spec/{,*/}*.ts'],
+                files: ['test/spec/**/*.ts'],
                 tasks: ['typescript:test', 'karma']
             },
             js: {

@@ -19,7 +19,8 @@ module StoriaApp
             searcher.searchPromise(query).then((events) =>
             {
                 this.events = events;
-            });
+            })
+            .catch(cause => console.warn(cause));
         }
     }
 }

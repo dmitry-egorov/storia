@@ -23,7 +23,8 @@ module StoriaApp
             {
                 this.events = events;
                 this.disableInfiniteScroll = false;
-            });
+            })
+            .catch(cause => console.warn(cause));
         }
     }
 }

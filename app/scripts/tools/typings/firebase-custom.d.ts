@@ -32,6 +32,7 @@ interface IFirebaseOnDisconnect {
 
 interface IFirebaseQuery {
     awaitQ<T>($q: ng.IQService): ng.IPromise<T>;
+    valueQ<T>($q: ng.IQService): ng.IPromise<T>;
     on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
     off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
     once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;
@@ -49,7 +50,28 @@ interface IServerValue {
     TIMESTAMP
 }
 
-declare class Firebase implements IFirebaseQuery {
+declare module fb.api
+{
+    class Query implements IFirebaseQuery
+    {
+        awaitQ<T>($q: ng.IQService): ng.IPromise<T>;
+        valueQ<T>($q: ng.IQService): ng.IPromise<T>;
+        on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
+        off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
+        once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;
+        exists($q: ng.IQService): ng.IPromise<boolean>;
+        limit(limit: number): IFirebaseQuery;
+        limitToLast(limit: number): IFirebaseQuery;
+        startAt(priority?: string, name?: string): IFirebaseQuery;
+        startAt(priority?: number, name?: string): IFirebaseQuery;
+        endAt(priority?: string, name?: string): IFirebaseQuery;
+        endAt(priority?: number, name?: string): IFirebaseQuery;
+        ref(): Firebase;
+    }
+}
+
+
+declare class Firebase extends fb.api.Query {
     constructor(firebaseURL: string);
     auth(authToken: string, onComplete?: (error: any, result: IFirebaseAuthResult) => void, onCancel?:(error: any) => void): void;
     unauth(): void;
@@ -73,18 +95,6 @@ declare class Firebase implements IFirebaseQuery {
     onAuth(callback: any);
     authWithOAuthPopup(provider: string, callback: any);
     orderByChild(propertyName: string): Firebase;
-    awaitQ<T>($q: ng.IQService): ng.IPromise<T>;
-    on(eventType: string, callback: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, cancelCallback?: ()=> void, context?: Object): (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void;
-    off(eventType?: string, callback?: (dataSnapshot: IFirebaseDataSnapshot, prevChildName?: string) => void, context?: Object): void;
-    once(eventType: string, successCallback: (dataSnapshot: IFirebaseDataSnapshot) => void, failureCallback?: () => void, context?: Object): void;
-    exists($q: ng.IQService): ng.IPromise<boolean>;
-    limit(limit: number): IFirebaseQuery;
-    limitToLast(limit: number): IFirebaseQuery;
-    startAt(priority?: string, name?: string): IFirebaseQuery;
-    startAt(priority?: number, name?: string): IFirebaseQuery;
-    endAt(priority?: string, name?: string): IFirebaseQuery;
-    endAt(priority?: number, name?: string): IFirebaseQuery;
-    ref(): Firebase;
     goOffline(): void;
     goOnline(): void;
     public static ServerValue: IServerValue;

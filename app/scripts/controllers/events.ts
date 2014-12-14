@@ -11,6 +11,7 @@ module StoriaApp
         private eventId: string;
 
         public static $inject = ['$scope', '$routeParams', 'EventsProvider'];
+
         constructor($scope: ng.IScope, $routeParams: any, private eventsProvider: StoriaApp.IEventsProvider)
         {
             this.eventId = $routeParams.id;
@@ -22,10 +23,12 @@ module StoriaApp
 
         public loadEvents()
         {
-            this.eventsProvider.getEventPromise(this.eventId).then((event) =>
-            {
-                this.event = event;
-            });
+            this.eventsProvider.getEventPromise(this.eventId)
+                .then((event) =>
+                {
+                    this.event = event;
+                })
+                .catch(cause => console.warn(cause));
         }
     }
 }

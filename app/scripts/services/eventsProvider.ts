@@ -20,7 +20,7 @@ module StoriaApp
         {
             Assert.defined(id);
 
-            return this.fbutils/*.cached('event/' + id)*/.viewPromise(
+            return this.fbutils.viewPromise(
                 {
                     _ref: this.fb.child('events'),
                     id: FirebaseUtils.getId,

@@ -9,120 +9,76 @@ module FirebaseUtils
 
     export class ViewGenerator
     {
-        private cache: Object;
 
         public static $inject = ['$q'];
 
-        constructor(private $q)
-        {
-            this.cache = {};
-        }
-
-        public cached(key: string)
-        {
-            return {
-                viewPromise: (spec, id) => //TODO: get key from spec + id
-                {
-                    var cached = this.cache[key];
-                    if (cached)
-                    {
-                        return cached;
-                    }
-
-                    var viewPromise = this.viewPromise(spec, id);
-
-                    this.cache[key] = viewPromise;
-
-                    return viewPromise;
-                }
-            };
-        }
+        constructor(private $q: ng.IQService) {}
 
         public viewPromise(spec: Object, id): ng.IPromise<any>
         {
-            var resultDeferred = this.$q.defer();
-
             if (spec['_listRef'] && id)
             {
-                var result = [];
-                var promises = [];
                 var idsListRef = spec['_listRef'];
 
-                Object.keys(id).forEach((key) =>
-                {
-                    var promise = this.loadRef(key, idsListRef, spec).then((obj) =>
-                    {
-                        result.push(obj);
-                    });
+                var promises =
+                    Object
+                        .keys(id)
+                        .map((key) => this.loadRef(key, idsListRef, spec));
 
-                    promises.push(promise);
-                });
-
-                this.$q.all(promises).then(() =>
-                {
-                    resultDeferred.resolve(result);
-                });
+                return this.$q.all(promises).then(a => a.filter(x => !!x));
             }
             else if (spec['_listRef'])
             {
                 var listRef: Firebase = spec['_listRef'];
 
-                listRef.once('value', (snap) =>
-                {
-                    var result = [];
-                    var promises = [];
-                    var snapVal = snap.val();
-
-                    Object.keys(snapVal).forEach((key) =>
+                return listRef
+                    .valueQ<any>(this.$q)
+                    .then(value =>
                     {
-                        var promise = this.loadObject(snapVal[key], spec, key).then((res) =>
+                        if (!value)
                         {
-                            result.push(res);
-                        });
+                            return this.$q.when([])
+                        }
 
-                        promises.push(promise);
-                    });
+                        var promises = Object
+                            .keys(value)
+                            .map(key => this.loadObject(value[key], spec, key));
 
-                    this.$q.all(promises).then(() =>
-                    {
-                        resultDeferred.resolve(result);
+                        return this.$q.all(promises);
                     });
-                });
             }
             else if (spec['_ref'])
             {
-                var ref = spec['_ref'];
-
-                return this.loadRef(id, ref, spec);
+                return this.loadRef(id, spec['_ref'], spec);
             }
-
-            return resultDeferred.promise;
+            else
+            {
+                throw "Invalid spec";
+            }
         }
 
-        private loadRef(id, ref, spec)
+        private loadRef(id, ref, spec): ng.IPromise<any>
         {
-            var resultDeferred = this.$q.defer();
-
             if (id)
             {
                 ref = ref.child(id);
             }
 
-            ref.once('value', (snap) =>
-            {
-                var snapVal = snap.val();
-
-                this.loadObject(snapVal, spec, id).then((result) =>
+            return ref
+                .valueQ(this.$q)
+                .then(value =>
                 {
-                    resultDeferred.resolve(result);
-                });
-            });
+                    if (!value)
+                    {
+                        return this.$q.when(null)
+                    }
 
-            return resultDeferred.promise;
+                    return this.loadObject(value, spec, id)
+                });
         }
 
 
-        private loadObject(obj, spec, key)
+        private loadObject(obj, spec, key): ng.IPromise<any>
         {
             var result = {};
 

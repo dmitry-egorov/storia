@@ -63,6 +63,7 @@
 <![endif]-->
 <!-- endbuild -->
 
+
 <!-- build:js(.) scripts/vendor.js -->
 <!-- bower:js -->
 <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -83,7 +84,7 @@
 <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/tooltip.js"></script>
 <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap/popover.js"></script>
 <script src="bower_components/ngDialog/js/ngDialog.js"></script>
-<script src="bower_components/firebase/firebase.js"></script>
+<script src="bower_components/firebase/firebase-debug.js"></script>
 <script src="bower_components/angularfire/dist/angularfire.js"></script>
 <script src="bower_components/rxjs/dist/rx.all.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -92,6 +93,8 @@
 <script src="bower_components/angular-rx/dist/rx.angular.js"></script>
 <!-- endbower -->
 <!-- endbuild -->
+
+<!--<script type="text/javascript" src="/__/env.js"></script>-->
 
 <!-- build:js({.tmp,app}) scripts/scripts.js -->
 
@@ -102,7 +105,7 @@
 <script src="scripts/app/scripts/tools/utils/ObjectEx.js"></script>
 <script src="scripts/app/scripts/tools/firebase/firebase-utils.js"></script>
 <script src="scripts/app/scripts/tools/firebase/firebase-extensions.js"></script>
-<script src="scripts/app/scripts/tools/angularfire/config.js"></script>
+<script src="scripts/app/scripts/config.js"></script>
 <script src="scripts/app/scripts/model/Event.js"></script>
 <script src="scripts/app/scripts/model/Report.js"></script>
 <script src="scripts/app/scripts/services/specs/views.js"></script>
@@ -136,5 +139,6 @@
 <script src="scripts/app/scripts/directives/ngFallbackSrc.js"></script>
 
 <!-- endbuild -->
+
 </body>
 </html>
