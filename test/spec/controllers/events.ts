@@ -1,6 +1,7 @@
 /// <reference path="../../../typings/angularjs/angular-mocks.d.ts" />
 /// <reference path="../../../typings/jasmine/jasmine.d.ts" />
 /// <reference path="../../../app/scripts/controllers/events.ts" />
+/// <reference path="../../mock/EventsProviderMock.ts" />
 
 'use strict';
 
@@ -16,10 +17,10 @@ describe('Controller: EventsCtrl', () =>
         scope = $rootScope.$new();
 
         EventsCtrl = new StoriaApp.EventsController(
-                scope,
-                {id: event},
-                <StoriaApp.IEventsProvider>{getEventPromise: () => { return <ng.IPromise<any>>{then: (callback) => callback(event)};}}
-            );
+            scope,
+            {id: event},
+            new EventsProviderMock(event)
+        );
     }));
 
     it('should attach an event to the scope', () =>

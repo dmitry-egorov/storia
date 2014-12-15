@@ -1,4 +1,5 @@
 /// <reference path="../../app/scripts/services/interfaces/IHomeProvider.ts" />
+/// <reference path="PromiseMock.ts" />
 
 class HomeProviderMock implements StoriaApp.IHomeProvider
 {
@@ -6,6 +7,6 @@ class HomeProviderMock implements StoriaApp.IHomeProvider
 
     getHomePromise(): ng.IPromise<any>
     {
-        return <ng.IPromise<any>>{then: (callback) => callback(this.events)};
+        return <ng.IPromise<any>><any> new PromiseMock(this.events);
     }
 }
