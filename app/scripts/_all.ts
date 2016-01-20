@@ -18,6 +18,7 @@
 /// <reference path="model/Report.ts" />
 /// <reference path="services/specs/views.ts" />
 /// <reference path="services/factories/ReportFactory.ts" />
+/// <reference path="services/aggregatesCommander.ts" />
 /// <reference path="services/commander.ts" />
 /// <reference path="services/authenticator.ts" />
 /// <reference path="services/homeProvider.ts" />

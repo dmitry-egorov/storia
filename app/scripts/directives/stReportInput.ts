@@ -20,7 +20,7 @@ module StoriaApp
 
         expand()
         {
-            if (!this.profileProvider.currentProfile())
+            if (!this.profileProvider.getCurrentProfile())
             {
                 //TODO: show registration
                 return;

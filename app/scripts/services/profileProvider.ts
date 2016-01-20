@@ -4,7 +4,7 @@ module StoriaApp
 {
     export class ProfileProvider
     {
-        private current;
+        private currentProfile;
         private currentSubject: Rx.ISubject<any>;
         private profileRef: Firebase;
         private accountRef: Firebase;
@@ -16,14 +16,14 @@ module StoriaApp
             this.currentSubject = new Rx.BehaviorSubject(null);
             this.currentSubject.subscribe(profile =>
             {
-                this.current = profile;
+                this.currentProfile = profile;
             });
             this.initSubject();
         }
 
-        currentProfile()
+        getCurrentProfile()
         {
-            return this.current;
+            return this.currentProfile;
         }
 
         watchCurrentProfile(): Rx.Observable<any>

@@ -27,11 +27,8 @@ module StoriaApp
                 return;
             }
 
-            var provider = authData.provider;
-            var providerData = authData[provider];
-            var displayName = providerData.displayName;
 
-            this.userStorage.tryCreateUser(authData.uid, provider, providerData, displayName);
+            this.userStorage.tryCreateUser(authData);
         }
     }
 }

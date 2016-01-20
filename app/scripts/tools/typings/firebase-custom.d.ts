@@ -84,6 +84,7 @@ declare class Firebase extends fb.api.Query {
     setQ($q:ng.IQService, value: any): ng.IPromise<void>;
     update(value: any, onComplete?: (error: any) => void): void;
     remove(onComplete?: (error: any) => void): void;
+    push(): Firebase;
     push(value: any, onComplete?: (error: any) => void): Firebase;
     pushQ($q:ng.IQService, value: any): ng.IPromise<string>;
     setWithPriority(value: any, priority: string, onComplete?: (error: any) => void): void;

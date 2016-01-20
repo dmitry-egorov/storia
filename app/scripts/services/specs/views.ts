@@ -8,8 +8,7 @@ module Views
             id: FirebaseUtils.getId,
             image: true,
             name: true,
-            publisherName: true,
-            addedOn: true
+            publisherName: true
         };
     }
 

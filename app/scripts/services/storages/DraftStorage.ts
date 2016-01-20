@@ -8,7 +8,7 @@ module StoriaApp
 
         updateDraft(eventId: string, text: string): void
         {
-            var author = this.profileProvider.currentProfile();
+            var author = this.profileProvider.getCurrentProfile();
             Assert.defined(author);
 
             var authorId = author.id;

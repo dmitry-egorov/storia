@@ -8,17 +8,17 @@ module StoriaApp
         disabled: boolean;
         reportVotes: number;
 
-        constructor(private reportId: string, $scope: ng.IScope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider)
+        constructor(private reportId: any, $scope: ng.IScope, private reportsStorage: StoriaApp.ReportsStorage, private profileProvider: StoriaApp.ProfileProvider, reportsProvider: StoriaApp.ReportsProvider)
         {
             this.disabled = true;
             this.upvoted = false;
 
-            reportsProvider.watchUpvote(reportId).withScope($scope).subscribe(status =>
+            reportsProvider.watchUpvote(reportId.own).withScope($scope).subscribe(status =>
             {
                 this.setFlagsForStatus(status);
             });
 
-            reportsProvider.watchVotesCount(reportId).withScope($scope).subscribe((count) =>
+            reportsProvider.watchVotesCount(reportId.own).withScope($scope).subscribe((count) =>
             {
                 this.reportVotes = count;
             });
@@ -26,11 +26,12 @@ module StoriaApp
 
         upvote()
         {
-            var profile = this.profileProvider.currentProfile();
+            var profile = this.profileProvider.getCurrentProfile();
             if (profile)
             {
+                var cast = !this.upvoted;
                 this.setFlagsForStatus(UpvoteStatus.Waiting);
-                this.reportsStorage.upvote(this.reportId);
+                this.reportsStorage.upvote(this.reportId, cast);
             }
             else
             {

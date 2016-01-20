@@ -8,7 +8,7 @@ module StoriaApp
 
         getDraftContent(eventId: string): ng.IPromise<string>
         {
-            var profile = this.profileProvider.currentProfile();
+            var profile = this.profileProvider.getCurrentProfile();
             Assert.defined(profile);
 
             var authorId = profile.id;
